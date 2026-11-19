@@ -1,0 +1,15 @@
+services:
+  f201a-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: f201a-generator:latest
+    container_name: f201a-generator
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OLLAMA_HOST=http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped

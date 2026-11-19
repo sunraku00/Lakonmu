@@ -415,7 +415,7 @@ NON_NAME_WORDS = {
     "islam", "kristen", "katolik", "hindu", "buddha", "khonghucu", "kawin", "belum kawin",
     "wni", "wna", "nik", "kk", "no", "nama", "nama pelapor", "nama lengkap", "umur", "usia",
     "pekerjaan", "alamat", "hubungan", "ayah kandung", "ibu kandung", "ayah", "ibu", "pelapor",
-    "saksi", "saksi 1", "saksi 2", "saksi i", "saksi ii"
+    "saksi", "saksi 1", "saksi 2", "saksi i", "saksi ii", "kandung", "hubungan keluarga"
 }
 
 COMMON_JOBS = [
@@ -524,11 +524,13 @@ def parse_person_snippet(text: str) -> Dict[str, str]:
 
         # F. Nama dengan label eksplisit (Maju maupun Mundur)
         if not res["nama"] and re.search(r"\b" + LABEL_PAT + r"\b", line, re.I):
+            if re.search(r"\b(?:hubungan|status\s*hubungan)\b", line, re.I):
+                continue
             clean_nm = re.sub(r"^" + LABEL_PAT + r"[\s:=	]*", "", line, flags=re.I)
             clean_nm = re.sub(r"[\s:=	]*" + LABEL_PAT + r"$", "", clean_nm, flags=re.I).strip(" :-\t")
             clean_nm = re.sub(r"\b\d{16}\b", "", clean_nm).strip()
             clean_nm = re.sub(r"\(.*?\)", "", clean_nm).strip()
-            if clean_nm and len(clean_nm) > 2 and clean_nm.lower() not in NON_NAME_WORDS:
+            if clean_nm and len(clean_nm) > 2 and clean_nm.lower() not in NON_NAME_WORDS and not any(w in clean_nm.lower() for w in ["hubungan", "kandung"]):
                 res["nama"] = clean_nm.upper()
 
     # 3. Fallbacks jika belum terisi
@@ -728,20 +730,20 @@ def extract_from_sections(
     # Bangun prompt terstruktur rapi untuk AI
     prompt_parts = []
     if p_text:
-        prompt_parts.append(f"=== 1. DATA KELAHIRAN / PERISTIWA (Bayi / RS / Puskesmas / Jenazah) ===\n{p_text}")
+        prompt_parts.append(f"=== DATA PERISTIWA ===\n{p_text}")
     if pelapor_text:
-        prompt_parts.append(f"=== 2. DATA PELAPOR ===\n{pelapor_text}")
+        prompt_parts.append(f"=== DATA PELAPOR ===\n{pelapor_text}")
     if ayah_text:
-        prompt_parts.append(f"=== 3A. DATA AYAH KANDUNG ===\n{ayah_text}")
+        prompt_parts.append(f"=== DATA AYAH ===\n{ayah_text}")
     if ibu_text:
-        prompt_parts.append(f"=== 3B. DATA IBU KANDUNG ===\n{ibu_text}")
+        prompt_parts.append(f"=== DATA IBU ===\n{ibu_text}")
     if ortu_text and not (ayah_text and ibu_text):
-        prompt_parts.append(f"=== 3. DATA ORANG TUA (AYAH & IBU) ===\n{ortu_text}")
+        prompt_parts.append(f"=== DATA ORANG TUA ===\n{ortu_text}")
 
     if saksi1_text:
-        prompt_parts.append(f"=== 4. DATA SAKSI I ===\n{saksi1_text}")
+        prompt_parts.append(f"=== DATA SAKSI 1 ===\n{saksi1_text}")
     if saksi2_text:
-        prompt_parts.append(f"=== 5. DATA SAKSI II ===\n{saksi2_text}")
+        prompt_parts.append(f"=== DATA SAKSI 2 ===\n{saksi2_text}")
 
     combined_text = "\n\n".join(prompt_parts)
     if not combined_text:
@@ -770,15 +772,61 @@ def extract_from_sections(
         result = extract_with_smart_regex(combined_text)
         result["_warning"] = f"AI ({engine}) dialihkan ke Smart Regex terstruktur: {str(e)}"
 
+    # Hormati pilihan jenis pelaporan yang eksplisit jika dikirimkan
+    if sections.get("jenis_pelaporan") in ["Kelahiran", "Lahir Mati", "Kematian"]:
+        result["jenis_pelaporan"] = sections["jenis_pelaporan"]
+
+    # Ekstraksi dan perkuat data peristiwa dari kotak peristiwa spesifik
+    if p_text:
+        p_info = parse_peristiwa_snippet(p_text, result.get("jenis_pelaporan", "Kelahiran"))
+        if p_info.get("nama_bayi"):
+            result.setdefault("kelahiran", {})["nama_bayi"] = p_info["nama_bayi"]
+            result.setdefault("subjek_akta", {})["nama"] = p_info["nama_bayi"]
+        if p_info.get("nama_jenazah") and result.get("jenis_pelaporan") == "Kematian":
+            result.setdefault("kematian", {})["nama_lengkap"] = p_info["nama_jenazah"]
+            result.setdefault("subjek_akta", {})["nama"] = p_info["nama_jenazah"]
+        if p_info.get("jenis_kelamin"):
+            result.setdefault("kelahiran", {})["jenis_kelamin"] = p_info["jenis_kelamin"]
+        if p_info.get("berat_bayi_kg"):
+            result.setdefault("kelahiran", {})["berat_bayi_kg"] = p_info["berat_bayi_kg"]
+        if p_info.get("panjang_bayi_cm"):
+            result.setdefault("kelahiran", {})["panjang_bayi_cm"] = p_info["panjang_bayi_cm"]
+        if p_info.get("kelahiran_ke"):
+            result.setdefault("kelahiran", {})["kelahiran_ke"] = p_info["kelahiran_ke"]
+        if p_info.get("hari_lahir"):
+            result.setdefault("kelahiran", {})["hari_lahir"] = p_info["hari_lahir"]
+        if p_info.get("tgl"):
+            result.setdefault("kelahiran", {})["tgl_lahir"] = p_info["tgl"]
+            result.setdefault("kematian", {})["tgl_kematian"] = p_info["tgl"]
+        if p_info.get("bln"):
+            result.setdefault("kelahiran", {})["bln_lahir"] = p_info["bln"]
+            result.setdefault("kematian", {})["bln_kematian"] = p_info["bln"]
+        if p_info.get("thn"):
+            result.setdefault("kelahiran", {})["thn_lahir"] = p_info["thn"]
+            result.setdefault("kematian", {})["thn_kematian"] = p_info["thn"]
+        if p_info.get("pukul_jam"):
+            result.setdefault("kelahiran", {})["pukul_jam"] = p_info["pukul_jam"]
+            result.setdefault("kematian", {})["pukul_jam"] = p_info["pukul_jam"]
+        if p_info.get("pukul_menit"):
+            result.setdefault("kelahiran", {})["pukul_menit"] = p_info["pukul_menit"]
+            result.setdefault("kematian", {})["pukul_menit"] = p_info["pukul_menit"]
+        if p_info.get("nama_faskes"):
+            result.setdefault("kelahiran", {})["nama_faskes"] = p_info["nama_faskes"]
+            if p_info.get("tempat_dilahirkan"):
+                result.setdefault("kelahiran", {})["tempat_dilahirkan"] = p_info["tempat_dilahirkan"]
+        if p_info.get("penolong_kelahiran"):
+            result.setdefault("kelahiran", {})["penolong_kelahiran"] = p_info["penolong_kelahiran"]
+
     # Enforce keakuratan dari masing-masing kotak spesifik
     if pelapor_text:
         p_info = parse_person_snippet(pelapor_text)
-        if p_info["nama"] and (not result.get("pelapor", {}).get("nama") or len(result["pelapor"]["nama"]) < 3):
+        if p_info["nama"]:
             result.setdefault("pelapor", {})["nama"] = p_info["nama"]
         if p_info["nik"]:
             result.setdefault("pelapor", {})["nik"] = p_info["nik"]
         if p_info["nomor_kk"]:
             result.setdefault("pelapor", {})["nomor_kk"] = p_info["nomor_kk"]
+            result.setdefault("subjek_akta", {})["nomor_kk"] = p_info["nomor_kk"]
 
     if ayah_text:
         a_info = parse_person_snippet(ayah_text)
@@ -799,30 +847,58 @@ def extract_from_sections(
         if i_info["thn"]: result.setdefault("ibu", {})["thn"] = i_info["thn"]
 
     if ortu_text and not (ayah_text and ibu_text):
-        # Pisah otomatis bagian Ayah dan Ibu jika keduanya berada dalam 1 kotak
-        ibu_m = re.search(r"\b(?:identitas\s*ibu|nama\s*ibu|ibu\s*kandung|ibu:)\b", ortu_text, re.I)
-        ayah_m = re.search(r"\b(?:identitas\s*ayah|nama\s*ayah|ayah\s*kandung|ayah:)\b", ortu_text, re.I)
-        if ibu_m and ayah_m:
-            if ayah_m.start() < ibu_m.start():
-                part_a = ortu_text[ayah_m.start():ibu_m.start()]
-                part_i = ortu_text[ibu_m.start():]
-            else:
-                part_i = ortu_text[ibu_m.start():ayah_m.start()]
-                part_a = ortu_text[ayah_m.start():]
-            a_info = parse_person_snippet(part_a)
-            i_info = parse_person_snippet(part_i)
-            if a_info["nama"]: result.setdefault("ayah", {})["nama"] = a_info["nama"]
-            if a_info["nik"]: result.setdefault("ayah", {})["nik"] = a_info["nik"]
-            if a_info["tempat_lahir"]: result.setdefault("ayah", {})["tempat_lahir"] = a_info["tempat_lahir"]
-            if a_info["tgl"]: result.setdefault("ayah", {})["tgl"] = a_info["tgl"]
-            if a_info["bln"]: result.setdefault("ayah", {})["bln"] = a_info["bln"]
-            if a_info["thn"]: result.setdefault("ayah", {})["thn"] = a_info["thn"]
-            if i_info["nama"]: result.setdefault("ibu", {})["nama"] = i_info["nama"]
-            if i_info["nik"]: result.setdefault("ibu", {})["nik"] = i_info["nik"]
-            if i_info["tempat_lahir"]: result.setdefault("ibu", {})["tempat_lahir"] = i_info["tempat_lahir"]
-            if i_info["tgl"]: result.setdefault("ibu", {})["tgl"] = i_info["tgl"]
-            if i_info["bln"]: result.setdefault("ibu", {})["bln"] = i_info["bln"]
-            if i_info["thn"]: result.setdefault("ibu", {})["thn"] = i_info["thn"]
+        # 1. Cek baris tabel SIAK untuk Ayah (KEPALA KELUARGA/SUAMI) & Ibu (ISTRI)
+        ayah_line = ""
+        ibu_line = ""
+        for line in ortu_text.splitlines():
+            line_u = line.upper()
+            if "KEPALA KELUARGA" in line_u or "SUAMI" in line_u:
+                ayah_line = line
+            elif "ISTRI" in line_u:
+                ibu_line = line
+
+        if ayah_line or ibu_line:
+            if ayah_line:
+                a_info = parse_person_snippet(ayah_line)
+                if a_info["nama"]: result.setdefault("ayah", {})["nama"] = a_info["nama"]
+                if a_info["nik"]: result.setdefault("ayah", {})["nik"] = a_info["nik"]
+                if a_info["tempat_lahir"]: result.setdefault("ayah", {})["tempat_lahir"] = a_info["tempat_lahir"]
+                if a_info["tgl"]: result.setdefault("ayah", {})["tgl"] = a_info["tgl"]
+                if a_info["bln"]: result.setdefault("ayah", {})["bln"] = a_info["bln"]
+                if a_info["thn"]: result.setdefault("ayah", {})["thn"] = a_info["thn"]
+            if ibu_line:
+                i_info = parse_person_snippet(ibu_line)
+                if i_info["nama"]: result.setdefault("ibu", {})["nama"] = i_info["nama"]
+                if i_info["nik"]: result.setdefault("ibu", {})["nik"] = i_info["nik"]
+                if i_info["tempat_lahir"]: result.setdefault("ibu", {})["tempat_lahir"] = i_info["tempat_lahir"]
+                if i_info["tgl"]: result.setdefault("ibu", {})["tgl"] = i_info["tgl"]
+                if i_info["bln"]: result.setdefault("ibu", {})["bln"] = i_info["bln"]
+                if i_info["thn"]: result.setdefault("ibu", {})["thn"] = i_info["thn"]
+        else:
+            # 2. Cek pemisahan blok Ayah dan Ibu jika berlabel
+            ibu_m = re.search(r"\b(?:identitas\s*ibu|nama\s*ibu|ibu\s*kandung|ibu:)\b", ortu_text, re.I)
+            ayah_m = re.search(r"\b(?:identitas\s*ayah|nama\s*ayah|ayah\s*kandung|ayah:)\b", ortu_text, re.I)
+            if ibu_m and ayah_m:
+                if ayah_m.start() < ibu_m.start():
+                    part_a = ortu_text[ayah_m.start():ibu_m.start()]
+                    part_i = ortu_text[ibu_m.start():]
+                else:
+                    part_i = ortu_text[ibu_m.start():ayah_m.start()]
+                    part_a = ortu_text[ayah_m.start():]
+                a_info = parse_person_snippet(part_a)
+                i_info = parse_person_snippet(part_i)
+                if a_info["nama"]: result.setdefault("ayah", {})["nama"] = a_info["nama"]
+                if a_info["nik"]: result.setdefault("ayah", {})["nik"] = a_info["nik"]
+                if a_info["tempat_lahir"]: result.setdefault("ayah", {})["tempat_lahir"] = a_info["tempat_lahir"]
+                if a_info["tgl"]: result.setdefault("ayah", {})["tgl"] = a_info["tgl"]
+                if a_info["bln"]: result.setdefault("ayah", {})["bln"] = a_info["bln"]
+                if a_info["thn"]: result.setdefault("ayah", {})["thn"] = a_info["thn"]
+                if i_info["nama"]: result.setdefault("ibu", {})["nama"] = i_info["nama"]
+                if i_info["nik"]: result.setdefault("ibu", {})["nik"] = i_info["nik"]
+                if i_info["tempat_lahir"]: result.setdefault("ibu", {})["tempat_lahir"] = i_info["tempat_lahir"]
+                if i_info["tgl"]: result.setdefault("ibu", {})["tgl"] = i_info["tgl"]
+                if i_info["bln"]: result.setdefault("ibu", {})["bln"] = i_info["bln"]
+                if i_info["thn"]: result.setdefault("ibu", {})["thn"] = i_info["thn"]
 
     if saksi1_text:
         s1_info = parse_person_snippet(saksi1_text)
@@ -869,93 +945,101 @@ def extract_with_gemini(raw_text: str, api_key: str, model_name: str = "gemini-2
     return json.loads(res_text.strip())
 
 
-def get_ollama_status(host: str = "http://localhost:11434") -> Dict[str, Any]:
+def get_ollama_status(host: str = "") -> Dict[str, Any]:
     """
     Mengecek apakah server Ollama sedang aktif dan mengambil daftar model lokal yang terinstal.
+    Mendukung fallback otomatis ke host.docker.internal jika dijalankan di dalam container Docker.
     """
-    clean_host = host.rstrip("/")
-    try:
-        import urllib.request
-        req = urllib.request.Request(f"{clean_host}/api/tags", headers={"User-Agent": "F201A-App"})
-        with urllib.request.urlopen(req, timeout=3) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            models = [m.get("name") or m.get("model") for m in data.get("models", [])]
-            return {
-                "online": True,
-                "host": clean_host,
-                "models": models,
-                "count": len(models)
-            }
-    except Exception as e:
-        return {
-            "online": False,
-            "host": clean_host,
-            "models": [],
-            "error": str(e)
-        }
+    target_hosts = []
+    if host and host.strip():
+        target_hosts.append(host.strip().rstrip("/"))
+    env_host = os.environ.get("OLLAMA_HOST", "").strip().rstrip("/")
+    if env_host and env_host not in target_hosts:
+        target_hosts.append(env_host)
+    if "http://localhost:11434" not in target_hosts:
+        target_hosts.append("http://localhost:11434")
+    if "http://host.docker.internal:11434" not in target_hosts:
+        target_hosts.append("http://host.docker.internal:11434")
+
+    last_error = ""
+    for clean_host in target_hosts:
+        try:
+            import urllib.request
+            req = urllib.request.Request(f"{clean_host}/api/tags", headers={"User-Agent": "F201A-App"})
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                models = [m.get("name") or m.get("model") for m in data.get("models", [])]
+                return {
+                    "online": True,
+                    "host": clean_host,
+                    "models": models,
+                    "count": len(models)
+                }
+        except Exception as e:
+            last_error = str(e)
+
+    primary_host = (host or env_host or "http://localhost:11434").rstrip("/")
+    return {
+        "online": False,
+        "host": primary_host,
+        "models": [],
+        "error": last_error
+    }
 
 
-def extract_with_ollama(raw_text: str, host: str = "http://localhost:11434", model_name: str = "qwen2.5:7b") -> Dict[str, Any]:
+def extract_with_ollama(raw_text: str, host: str = "", model_name: str = "qwen2.5:7b") -> Dict[str, Any]:
     """
     Ekstraksi menggunakan Local LLM via Ollama. 100% Offline dan Privat.
     Mendukung format JSON terstruktur untuk Formulir F-2.01 A Dukcapil.
     """
-    clean_host = host.rstrip("/")
-    
-    # 1. Coba gunakan SDK ollama resmi
-    try:
-        import ollama
-        client = ollama.Client(host=clean_host)
-        response = client.chat(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": f"DATA MENTAH DARI PENGGUNA:\n{raw_text}"}
-            ],
-            format="json",
-            options={"temperature": 0.1}
-        )
-        content = response["message"]["content"].strip()
-        if content.startswith("```json"):
-            content = content[7:]
-        if content.startswith("```"):
-            content = content[3:]
-        if content.endswith("```"):
-            content = content[:-3]
-        return json.loads(content.strip())
-    except Exception as sdk_err:
-        err_str = str(sdk_err).lower()
-        if "connect" in err_str or "refused" in err_str:
-            # Langsung lempar error koneksi agar tidak buang waktu timeout ganda
-            raise sdk_err
+    target_hosts = []
+    if host and host.strip():
+        target_hosts.append(host.strip().rstrip("/"))
+    env_host = os.environ.get("OLLAMA_HOST", "").strip().rstrip("/")
+    if env_host and env_host not in target_hosts:
+        target_hosts.append(env_host)
+    if "http://localhost:11434" not in target_hosts:
+        target_hosts.append("http://localhost:11434")
+    if "http://host.docker.internal:11434" not in target_hosts:
+        target_hosts.append("http://host.docker.internal:11434")
 
-        # 2. Fallback direct HTTP /api/chat jika SDK bermasalah bukan karena koneksi
-        import urllib.request
-        payload = {
-            "model": model_name,
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": f"DATA MENTAH DARI PENGGUNA:\n{raw_text}"}
-            ],
-            "format": "json",
-            "stream": False,
-            "options": {"temperature": 0.1}
-        }
-        req = urllib.request.Request(
-            f"{clean_host}/api/chat",
-            data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"}
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            res = json.loads(resp.read().decode("utf-8"))
-            msg_content = res.get("message", {}).get("content") or res.get("response", "{}")
-            if msg_content.startswith("```json"):
-                msg_content = msg_content[7:]
-            if msg_content.startswith("```"):
-                msg_content = msg_content[3:]
-            if msg_content.endswith("```"):
-                msg_content = msg_content[:-3]
-            return json.loads(msg_content.strip())
+    import urllib.request
+    payload = {
+        "model": model_name,
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"DATA MENTAH DARI PENGGUNA:\n{raw_text}"}
+        ],
+        "format": "json",
+        "stream": False,
+        "options": {"temperature": 0.1}
+    }
+
+    last_err = None
+    for clean_host in target_hosts:
+        try:
+            req = urllib.request.Request(
+                f"{clean_host}/api/chat",
+                data=json.dumps(payload).encode("utf-8"),
+                headers={"Content-Type": "application/json"}
+            )
+            with urllib.request.urlopen(req, timeout=45) as resp:
+                res = json.loads(resp.read().decode("utf-8"))
+                msg_content = res.get("message", {}).get("content") or res.get("response", "{}")
+                if msg_content.startswith("```json"):
+                    msg_content = msg_content[7:]
+                if msg_content.startswith("```"):
+                    msg_content = msg_content[3:]
+                if msg_content.endswith("```"):
+                    msg_content = msg_content[:-3]
+                return json.loads(msg_content.strip())
+        except Exception as e:
+            last_err = e
+            continue
+
+    if last_err:
+        raise last_err
+    raise ConnectionError("Gagal terhubung ke Ollama di semua host yang dicoba.")
 
 
 def extract_with_openai(raw_text: str, api_key: str, model_name: str = "gpt-4o-mini") -> Dict[str, Any]:
