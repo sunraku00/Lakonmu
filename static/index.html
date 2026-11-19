@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator Formulir Dukcapil F-2.01 A | Ekstraksi Data AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            dukcapil: {
+              50: '#f0f5fa',
+              100: '#e1ecf5',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#0a3654',
+              950: '#052338',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- NAVBAR / HEADER -->
+  <header class="bg-dukcapil-950 text-white border-b border-dukcapil-800 shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-dukcapil-600 flex items-center justify-center font-bold text-white shadow-lg shadow-sky-500/20">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-lg font-bold tracking-tight">Formulir F-2.01 A Generator</h1>
+            <span class="bg-sky-500/20 border border-sky-400/30 text-sky-300 text-xs px-2 py-0.5 rounded-full font-medium">Permendagri</span>
+          </div>
+          <p class="text-xs text-slate-300 hidden sm:block">Pelaporan Pencatatan Sipil di Dalam Wilayah NKRI (Kelahiran, Kematian, Lahir Mati)</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <div class="hidden md:flex items-center space-x-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs px-3 py-1.5 rounded-lg">
+          <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="font-medium">Stateless (Zero Storage)</span>
+        </div>
+        <button onclick="toggleAiGuideModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5">
+          <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+          </svg>
+          <span>Saran AI & Panduan</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ZERO STORAGE BANNER -->
+  <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-200/60 py-2 px-4 text-xs text-emerald-800 text-center flex items-center justify-center space-x-2">
+    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span><strong>Jaminan Privasi Penuh:</strong> Tidak ada data atau teks yang disimpan ke database maupun harddisk server. Seluruh proses parsing dan pembuatan PDF dilakukan 100% <em>in-memory</em> (RAM) lalu langsung dikirim ke browser Anda.</span>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT COLUMN: INPUT TEXTAREA & CONTROLS (5 cols on lg) -->
+      <section class="lg:col-span-5 flex flex-col space-y-4">
+        
+        <!-- CARD INPUT -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col space-y-4">
+          
+          <!-- 3-WAY EVENT SELECTOR: KELAHIRAN | LAHIR MATI | KEMATIAN -->
+          <div class="space-y-1.5 pb-2 border-b border-slate-100">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center space-x-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-dukcapil-500 animate-pulse"></span>
+                <span>Pilih Jenis Pelaporan F-2.01 A:</span>
+              </label>
+              <span id="activeEventBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300">
+                👶 Kelahiran (Hal 1)
+              </span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 pt-1">
+              <!-- OPSI 1: KELAHIRAN -->
+              <button
+                type="button"
+                id="btnEventKelahiran"
+                onclick="selectEventType('Kelahiran')"
+                class="py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-sky-50 border-sky-500 text-sky-900 shadow-xs cursor-pointer"
+              >
+                <span class="text-lg">👶</span>
+                <span class="font-bold mt-0.5">Kelahiran</span>
+                <span class="text-[10px] text-sky-700/80 font-normal">Halaman 1</span>
+              </button>
+
+              <!-- OPSI 2: LAHIR MATI -->
+              <button
+                type="button"
+                id="btnEventLahirMati"
+                onclick="selectEventType('Lahir Mati')"
+                class="py-2 px-2 rounded-xl border border-slate-200 font-semibold text-xs flex flex-col items-center justify-center transition-all bg-white hover:bg-amber-50 hover:border-amber-300 text-slate-700 cursor-pointer shadow-2xs"
+              >
+                <span class="text-lg">🚼</span>
+                <span class="font-bold mt-0.5">Lahir Mati</span>
+                <span class="text-[10px] text-slate-400 font-normal">Halaman 2</span>
+              </button>
+
+              <!-- OPSI 3: KEMATIAN -->
+              <button
+                type="button"
+                id="btnEventKematian"
+                onclick="selectEventType('Kematian')"
+                class="py-2 px-2 rounded-xl border border-slate-200 font-semibold text-xs flex flex-col items-center justify-center transition-all bg-white hover:bg-rose-50 hover:border-rose-300 text-slate-700 cursor-pointer shadow-2xs"
+              >
+                <span class="text-lg">🕊️</span>
+                <span class="font-bold mt-0.5">Kematian</span>
+                <span class="text-[10px] text-slate-400 font-normal">Halaman 3</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pb-1">
+            <span class="text-xs font-semibold text-slate-600">Mode Format Input:</span>
+            <!-- MODE SWITCHER: 5 TEXT BOX vs 1 GLOBAL -->
+            <div class="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold">
+              <button
+                type="button"
+                id="btnTab5Box"
+                onclick="switchInputMode('5box')"
+                class="px-2.5 py-1 rounded-md bg-white text-dukcapil-800 shadow-xs transition-all flex items-center space-x-1"
+              >
+                <span>📑 5 Text Box</span>
+              </button>
+              <button
+                type="button"
+                id="btnTab1Box"
+                onclick="switchInputMode('1box')"
+                class="px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all flex items-center space-x-1"
+              >
+                <span>📄 1 Global</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- SAMPLE PRESET PILLS -->
+          <div class="flex flex-wrap gap-1.5 items-center">
+            <span class="text-xs text-slate-400 mr-1 font-medium">Contoh Copas:</span>
+            <button type="button" onclick="loadSample('rsia_bunda')" class="text-xs bg-slate-100 hover:bg-sky-50 hover:text-sky-700 hover:border-sky-300 border border-slate-200 px-2 py-1 rounded-lg transition-all font-medium text-slate-600">
+              👶 RSIA Bunda (Lahir)
+            </button>
+            <button type="button" onclick="loadSample('lahir_mati')" class="text-xs bg-slate-100 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200 px-2 py-1 rounded-lg transition-all font-medium text-slate-600">
+              🚼 RSUD Tarakan (Lahir Mati)
+            </button>
+            <button type="button" onclick="loadSample('kematian')" class="text-xs bg-slate-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 border border-slate-200 px-2 py-1 rounded-lg transition-all font-medium text-slate-600">
+              🕊️ RSUD PM (Kematian)
+            </button>
+            <button type="button" onclick="clearInput()" title="Bersihkan Semua Text Box" class="text-xs bg-slate-100 hover:bg-red-50 hover:text-red-600 border border-slate-200 px-2 py-1 rounded-lg text-slate-500 flex items-center space-x-1 transition-all">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              <span>Reset</span>
+            </button>
+          </div>
+
+          <!-- CONTAINER MODE 1: 5 DEDICATED TEXT BOXES (DEFAULT) -->
+          <div id="container5Box" class="space-y-3">
+            
+            <!-- 1. DATA KELAHIRAN / PERISTIWA -->
+            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
+              <div class="flex items-center justify-between mb-1">
+                <label id="peristiwaBoxTitle" class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                  <span>1. Data Peristiwa: Kelahiran</span>
+                </label>
+                <span id="peristiwaBoxSubtitle" class="text-[10px] text-slate-400">RS/Bidan, Nama Bayi, Tanggal/Jam Lahir, BB, PB</span>
+              </div>
+              <textarea
+                id="box_peristiwa"
+                rows="3"
+                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none focus:border-sky-400"
+                placeholder="Tempel Surat Keterangan Kelahiran di sini...
+Contoh: Nama Bayi: KENZIE ALFATIH, Lahir: 18 Nov 2026 07:45 WIB, RSIA Bunda Jakarta, BB: 3350 gr, PB: 50 cm, Dokter: dr. Robert Sp.OG"
+              ></textarea>
+            </div>
+
+            <!-- 2. DATA PELAPOR -->
+            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>2. Data Pelapor</span>
+                </label>
+                <span class="text-[10px] text-slate-400">Nama, NIK 16 digit, No. KK, Umur, Alamat</span>
+              </div>
+              <textarea
+                id="box_pelapor"
+                rows="2"
+                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none focus:border-emerald-400"
+                placeholder="Tempel data KTP / KK Pelapor di sini...
+Contoh: Nama: ARIEF PRASETYO, NIK: 3174011205880003, No. KK: 3174012010150007, Hubungan: Ayah"
+              ></textarea>
+            </div>
+
+            <!-- 3. DATA ORANG TUA (AYAH & IBU) -->
+            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                  <span>3. Data Orang Tua (Ayah & Ibu)</span>
+                </label>
+                <!-- SUB-TOGGLE: GABUNG AYAH/IBU VS PISAH DUA KOTAK -->
+                <div class="inline-flex p-0.5 rounded-md bg-slate-200/70 text-[10px] font-medium">
+                  <button type="button" id="btnOrtuCombined" onclick="toggleOrtuMode('combined')" class="px-1.5 py-0.5 rounded bg-white text-indigo-900 shadow-xs">👨‍👩‍👧 Gabung</button>
+                  <button type="button" id="btnOrtuSplit" onclick="toggleOrtuMode('split')" class="px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900">👨 Ayah | 👩 Ibu</button>
+                </div>
+              </div>
+
+              <!-- VIEW A: SINGLE COMBINED ORANG TUA TEXTAREA -->
+              <div id="ortuCombinedView">
+                <textarea
+                  id="box_orangtua"
+                  rows="3"
+                  class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none focus:border-indigo-400"
+                  placeholder="Tempel data Ayah dan Ibu sekaligus di sini...
+Contoh:
+Ayah: ARIEF PRASETYO (NIK: 3174011205880003), TTL: Jakarta 12-05-1988, Swasta
+Ibu: DIAN ANGGRAENI (NIK: 3174016508900002), TTL: Surabaya 25-08-1990, IRT"
+                ></textarea>
+              </div>
+
+              <!-- VIEW B: SPLIT AYAH AND IBU TEXTAREAS -->
+              <div id="ortuSplitView" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <span class="block text-[10px] font-bold text-slate-600 mb-0.5">👨 Identitas Ayah:</span>
+                  <textarea
+                    id="box_ayah"
+                    rows="2"
+                    class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none focus:border-indigo-400"
+                    placeholder="Nama Ayah, NIK, Tempat/Tgl Lahir, Pekerjaan..."
+                  ></textarea>
+                </div>
+                <div>
+                  <span class="block text-[10px] font-bold text-slate-600 mb-0.5">👩 Identitas Ibu:</span>
+                  <textarea
+                    id="box_ibu"
+                    rows="2"
+                    class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none focus:border-indigo-400"
+                    placeholder="Nama Ibu, NIK, Tempat/Tgl Lahir, Pekerjaan..."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. DATA SAKSI I -->
+            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span>4. Data Saksi I</span>
+                </label>
+                <span class="text-[10px] text-slate-400">Nama Saksi 1, NIK 16 digit, Umur, Pekerjaan</span>
+              </div>
+              <textarea
+                id="box_saksi1"
+                rows="2"
+                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none focus:border-amber-400"
+                placeholder="Tempel identitas Saksi I di sini...
+Contoh: Nama: Bambang Hermanto, NIK: 3174011003800004, Umur: 44 tahun, Pekerjaan: Wiraswasta"
+              ></textarea>
+            </div>
+
+            <!-- 5. DATA SAKSI II -->
+            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span>5. Data Saksi II</span>
+                </label>
+                <span class="text-[10px] text-slate-400">Nama Saksi 2, NIK 16 digit, Umur, Pekerjaan</span>
+              </div>
+              <textarea
+                id="box_saksi2"
+                rows="2"
+                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none focus:border-amber-400"
+                placeholder="Tempel identitas Saksi II di sini...
+Contoh: Nama: Dedi Kurniawan, NIK: 3174012004820005, Umur: 42 tahun, Pekerjaan: Pegawai BUMN"
+              ></textarea>
+            </div>
+
+          </div>
+
+          <!-- CONTAINER MODE 2: 1 GLOBAL UNIFIED TEXTAREA (CLASSIC) -->
+          <div id="container1Box" class="relative hidden">
+            <textarea
+              id="rawTextarea"
+              rows="12"
+              class="w-full text-xs font-mono bg-slate-50 border border-slate-300 focus:border-dukcapil-500 focus:ring-2 focus:ring-dukcapil-100 rounded-xl p-3.5 text-slate-700 leading-relaxed transition-all placeholder:text-slate-400 placeholder:font-sans resize-y outline-none"
+              placeholder="Tempel teks mentah panjang di sini...
+
+Contoh format apa saja yang dicopas dari web lain:
+- Data Surat Kelahiran dari Rumah Sakit / Bidan
+- Hasil form online SIMRS / Puskesmas
+- Data kependudukan / chat konfirmasi Dukcapil
+- Surat Keterangan Kematian
+
+AI & Smart Regex akan otomatis mendeteksi: NIK, Nama Bayi/Almarhum, No KK, Ayah, Ibu, RS, Tanggal, Jam, Berat, Panjang, dan Wilayah."
+            ></textarea>
+            <div id="charCount" class="absolute bottom-2 right-3 text-[10px] text-slate-400 pointer-events-none">0 karakter</div>
+          </div>
+
+          <!-- COLLAPSIBLE AI CONFIG ACCORDION -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+            <button type="button" onclick="toggleConfigAccordion()" class="w-full px-3.5 py-2.5 flex items-center justify-between text-left text-xs font-semibold text-slate-700 hover:bg-slate-100/70 transition-colors">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Konfigurasi AI: <span id="currentEngineBadge" class="text-emerald-700 font-bold">Local Ollama (100% Offline & Privat)</span></span>
+              </div>
+              <svg id="accordionChevron" class="w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div id="configContent" class="p-3.5 border-t border-slate-200 bg-white space-y-3 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Pilih Mesin AI / Deteksi:</label>
+                <select id="aiEngineSelect" onchange="onEngineChange()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:ring-1 focus:ring-sky-500 outline-none font-medium">
+                  <option value="ollama" selected>💻 Local AI via Ollama (100% Privat, Offline, Sesuai UU PDP)</option>
+                  <option value="regex">⚡ Smart Regex Bawaan (Offline, Tanpa API Key / LLM)</option>
+                  <option value="gemini">✨ Google Gemini 2.5 Flash (Sangat Cepat & Akurat via API)</option>
+                  <option value="openai">🧠 OpenAI GPT-4o-mini</option>
+                </select>
+                <p id="engineHint" class="mt-1 text-[11px] text-slate-500">Berjalan 100% lokal di komputer Anda. Data kependudukan tidak pernah keluar ke internet.</p>
+              </div>
+
+              <!-- OLLAMA HOST & MODEL (PRIMARY DEFAULT) -->
+              <div id="ollamaGroup" class="space-y-2.5 bg-emerald-50/50 border border-emerald-200/60 p-3 rounded-xl">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-emerald-900 flex items-center space-x-1.5 text-xs">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <span>Status Server Ollama Lokal</span>
+                  </span>
+                  <div id="ollamaStatusBadge" class="flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                    <span>Mengecek status...</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-0.5">Ollama Host URL:</label>
+                    <div class="flex space-x-1">
+                      <input type="text" id="ollamaHostInput" value="http://localhost:11434" class="w-full bg-white border border-slate-300 rounded p-1.5 text-slate-700 font-mono text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
+                      <button type="button" onclick="checkOllamaStatus(true)" title="Cek Ulang Koneksi" class="bg-white hover:bg-slate-100 border border-slate-300 px-2 rounded text-slate-600 transition-colors">
+                        🔄
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-0.5">Pilih Model Ollama:</label>
+                    <select id="ollamaModelSelect" onchange="onOllamaModelSelectChange()" class="w-full bg-white border border-slate-300 rounded p-1.5 text-slate-700 font-mono text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
+                      <option value="qwen2.5:7b" selected>qwen2.5:7b (Sangat Disarankan)</option>
+                      <option value="qwen2.5:3b">qwen2.5:3b (Ringan & Cepat)</option>
+                      <option value="llama3.2:3b">llama3.2:3b (Ringan)</option>
+                      <option value="llama3.1:8b">llama3.1:8b (Standar Akurasi)</option>
+                      <option value="deepseek-r1:7b">deepseek-r1:7b</option>
+                      <option value="custom">-- Ketik Nama Model Lain --</option>
+                    </select>
+                    <input type="text" id="ollamaModelInputCustom" placeholder="Nama model kustom..." class="hidden mt-1 w-full bg-white border border-slate-300 rounded p-1.5 text-slate-700 font-mono text-xs">
+                  </div>
+                </div>
+
+                <!-- OLLAMA HELPER BANNER (IF OFFLINE) -->
+                <div id="ollamaOfflineHelper" class="hidden bg-amber-50 border border-amber-200/80 p-2.5 rounded-lg text-[11px] text-amber-900 space-y-1">
+                  <div class="font-semibold flex items-center space-x-1">
+                    <span>💡 Cara Menjalankan Ollama di Komputer Anda:</span>
+                  </div>
+                  <p class="text-amber-800">
+                    Buka Command Prompt / PowerShell lalu jalankan perintah:
+                  </p>
+                  <div class="flex items-center justify-between bg-white border border-amber-300 px-2 py-1 rounded font-mono text-[10px] text-slate-800 select-all">
+                    <code>ollama run qwen2.5:7b</code>
+                    <button type="button" onclick="navigator.clipboard.writeText('ollama run qwen2.5:7b'); showAlert('Perintah tersalin!', 'info')" class="text-xs text-amber-700 hover:text-amber-900 font-sans ml-2">Salin</button>
+                  </div>
+                  <p class="text-[10px] text-amber-700 pt-0.5">
+                    <em>Catatan: Jika Ollama belum aktif saat Anda menekan tombol "Generate PDF", sistem otomatis menggunakan <strong>Smart Regex Bawaan</strong> sehingga Anda tetap dapat men-generate formulir tanpa kendala!</em>
+                  </p>
+                </div>
+              </div>
+
+              <!-- API KEY FIELD (shown for Gemini & OpenAI) -->
+              <div id="apiKeyGroup" class="hidden">
+                <div class="flex items-center justify-between mb-1">
+                  <label id="apiKeyLabel" class="font-semibold text-slate-700">API Key:</label>
+                  <span class="text-[10px] text-slate-400">Tersimpan di browser saja</span>
+                </div>
+                <div class="relative">
+                  <input type="password" id="apiKeyInput" placeholder="Masukkan API Key..." class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 pr-10 focus:ring-1 focus:ring-sky-500 outline-none font-mono text-xs">
+                  <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-2 top-2 text-slate-400 hover:text-slate-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PRIMARY ACTION BUTTONS -->
+          <div class="flex flex-col sm:flex-row gap-2 pt-2">
+            <!-- 1-CLICK GENERATE PDF BUTTON (PRIMARY) -->
+            <button
+              type="button"
+              id="btnGeneratePdf"
+              onclick="handleGeneratePdfDirect()"
+              class="flex-1 bg-dukcapil-700 hover:bg-dukcapil-800 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2 text-sm active:scale-[0.99]"
+            >
+              <svg class="w-5 h-5 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span>Generate PDF F-2.01 A</span>
+            </button>
+
+            <!-- SECONDARY: EXTRACT & REVIEW -->
+            <button
+              type="button"
+              id="btnExtractReview"
+              onclick="handleExtractReview()"
+              class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold py-3 px-4 rounded-xl shadow-sm transition-all flex items-center justify-center space-x-1.5 text-xs hover:border-slate-400"
+            >
+              <svg class="w-4 h-4 text-dukcapil-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              <span>Ekstrak & Tinjau</span>
+            </button>
+          </div>
+
+          <!-- STATUS & ALERTS -->
+          <div id="statusAlert" class="hidden p-3 rounded-xl text-xs flex items-center space-x-2"></div>
+        </div>
+
+        <!-- QUICK GUIDELINE NOTE -->
+        <div class="bg-dukcapil-50/70 border border-dukcapil-100 rounded-xl p-3.5 text-xs text-dukcapil-900 space-y-1">
+          <div class="font-semibold flex items-center space-x-1.5 text-dukcapil-800">
+            <svg class="w-4 h-4 text-dukcapil-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+            <span>Petunjuk Penggunaan:</span>
+          </div>
+          <p class="text-slate-600 leading-relaxed">
+            1. Salin teks data kelahiran/kematian dari web lain.<br>
+            2. Tempelkan ke textarea di atas.<br>
+            3. Klik <strong>"Generate PDF F-2.01 A"</strong> untuk langsung melihat dan mengunduh formulir resmi.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: RESULTS & PREVIEW (7 cols on lg) -->
+      <section class="lg:col-span-7 flex flex-col space-y-4">
+        
+        <!-- MAIN OUTPUT CARD -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col h-[750px]">
+          
+          <!-- TABS HEADER -->
+          <div class="bg-slate-50 border-b border-slate-200 px-4 pt-3 flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button id="tabBtnPdf" onclick="switchTab('pdf')" class="px-4 py-2 text-xs font-bold rounded-t-lg border-b-2 border-dukcapil-600 text-dukcapil-900 bg-white flex items-center space-x-1.5">
+                <svg class="w-4 h-4 text-dukcapil-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                <span>Pratinjau PDF F-2.01 A</span>
+              </button>
+              <button id="tabBtnData" onclick="switchTab('data')" class="px-4 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <span>Elemen Data Terdeteksi (<span id="detectedCount">0</span>)</span>
+              </button>
+            </div>
+            
+            <!-- ACTION BUTTONS FOR PDF -->
+            <div id="pdfActionButtons" class="flex items-center space-x-2 pb-1.5 hidden">
+              <button type="button" onclick="downloadCurrentPdf()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm flex items-center space-x-1 transition-all">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Unduh PDF</span>
+              </button>
+              <button type="button" onclick="openPdfInNewTab()" title="Buka di tab baru / Cetak" class="bg-slate-200 hover:bg-slate-300 text-slate-700 p-1.5 rounded-lg transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 1: PDF VIEWER CONTAINER -->
+          <div id="tabContentPdf" class="flex-1 flex flex-col bg-slate-100 relative">
+            <div id="emptyPdfState" class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400 space-y-3">
+              <div class="w-16 h-16 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-300">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              </div>
+              <div>
+                <p class="font-semibold text-slate-600 text-sm">Belum ada PDF yang dibuat</p>
+                <p class="text-xs text-slate-400 mt-1 max-w-sm">Klik salah satu contoh copas di sebelah kiri, lalu tekan tombol <strong>"Generate PDF F-2.01 A"</strong> untuk melihat hasil pratinjau langsung di sini.</p>
+              </div>
+            </div>
+
+            <!-- PDF IFRAME -->
+            <iframe id="pdfIframe" class="w-full h-full hidden border-none" src="about:blank"></iframe>
+
+            <!-- LOADING SPINNER OVERLAY -->
+            <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 z-30">
+              <div class="w-10 h-10 border-4 border-dukcapil-200 border-t-dukcapil-600 rounded-full animate-spin"></div>
+              <p id="loadingText" class="text-xs font-semibold text-dukcapil-900">Mengekstrak data & mengisi formulir F-2.01 A...</p>
+            </div>
+          </div>
+
+          <!-- TAB 2: DETECTED ELEMENTS INTERACTIVE FORM -->
+          <div id="tabContentData" class="flex-1 flex flex-col p-4 overflow-y-auto hidden bg-slate-50/50 space-y-4">
+            <div class="flex items-center justify-between bg-sky-50 border border-sky-200 p-3 rounded-xl text-xs text-sky-900">
+              <span>Data di bawah ini diekstrak secara otomatis dari teks mentah. Anda dapat mengedit atau melengkapi sebelum men-generate ulang PDF.</span>
+              <button type="button" onclick="handleGenerateFromEditor()" class="bg-dukcapil-700 hover:bg-dukcapil-800 text-white font-bold px-3 py-1.5 rounded-lg shadow text-xs flex-shrink-0 ml-3">
+                Update & Generate PDF
+              </button>
+            </div>
+
+            <!-- FORM GROUPS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              <!-- GROUP: JENIS & WILAYAH -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                  <span>1. Peristiwa & Wilayah</span>
+                </h3>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Jenis Pelaporan:</label>
+                  <select id="f_jenis_pelaporan" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                    <option value="Kelahiran">Kelahiran</option>
+                    <option value="Lahir Mati">Lahir Mati</option>
+                    <option value="Kematian">Kematian</option>
+                  </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Provinsi:</label>
+                    <input type="text" id="f_wilayah_provinsi" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Kab/Kota:</label>
+                    <input type="text" id="f_wilayah_kab_kota" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Kecamatan:</label>
+                    <input type="text" id="f_wilayah_kecamatan" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Desa/Kelurahan:</label>
+                    <input type="text" id="f_wilayah_kelurahan" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                  </div>
+                </div>
+              </div>
+
+              <!-- GROUP: SUBJEK AKTA / BAYI -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>2. Bayi / Subjek Akta</span>
+                </h3>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Nama Bayi / Subjek:</label>
+                  <input type="text" id="f_bayi_nama" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-bold text-slate-800">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Jenis Kelamin:</label>
+                    <select id="f_bayi_jk" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                      <option value="Laki-Laki">1. Laki-Laki</option>
+                      <option value="Perempuan">2. Perempuan</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Tempat Lahir (RS/Klinik):</label>
+                    <input type="text" id="f_bayi_faskes" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Hari Lahir:</label>
+                    <input type="text" id="f_bayi_hari" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs" placeholder="Senin">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Tanggal (DD-MM-YYYY):</label>
+                    <div class="flex space-x-1">
+                      <input type="text" id="f_bayi_tgl" placeholder="DD" class="w-1/3 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                      <input type="text" id="f_bayi_bln" placeholder="MM" class="w-1/3 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                      <input type="text" id="f_bayi_thn" placeholder="YYYY" class="w-1/3 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Pukul (Jam : Menit):</label>
+                    <div class="flex space-x-1">
+                      <input type="text" id="f_bayi_jam" placeholder="07" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                      <input type="text" id="f_bayi_menit" placeholder="45" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Berat (Kg) & PB (cm):</label>
+                    <div class="flex space-x-1">
+                      <input type="text" id="f_bayi_berat" placeholder="Kg" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                      <input type="text" id="f_bayi_panjang" placeholder="cm" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- GROUP: ORANG TUA -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                  <span>3. Data Orang Tua</span>
+                </h3>
+                <div class="space-y-2">
+                  <div class="p-2 bg-slate-50 rounded-lg border border-slate-200/60 space-y-1.5">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Ayah Kandung:</span>
+                    <input type="text" id="f_ayah_nama" placeholder="Nama Ayah" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs">
+                    <input type="text" id="f_ayah_nik" placeholder="NIK Ayah (16 digit)" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs font-mono">
+                  </div>
+                  <div class="p-2 bg-slate-50 rounded-lg border border-slate-200/60 space-y-1.5">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Ibu Kandung:</span>
+                    <input type="text" id="f_ibu_nama" placeholder="Nama Ibu" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs">
+                    <input type="text" id="f_ibu_nik" placeholder="NIK Ibu (16 digit)" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs font-mono">
+                  </div>
+                </div>
+              </div>
+
+              <!-- GROUP: PELAPOR & KELUARGA -->
+              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span>4. Pelapor & Kartu Keluarga</span>
+                </h3>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Nomor Kartu Keluarga (KK):</label>
+                  <input type="text" id="f_nomor_kk" placeholder="16 digit No. KK" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-mono font-bold text-dukcapil-700">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Nama Pelapor:</label>
+                  <input type="text" id="f_pelapor_nama" placeholder="Nama Pelapor" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">NIK Pelapor:</label>
+                  <input type="text" id="f_pelapor_nik" placeholder="NIK Pelapor" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-mono">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: SARAN PENGGUNAAN AI & UU PDP -->
+  <div id="aiGuideModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-dukcapil-100 text-dukcapil-700 flex items-center justify-center font-bold text-sm">
+            AI
+          </div>
+          <h3 class="text-base font-bold text-slate-800">Saran Penggunaan AI untuk Ekstraksi Data F-2.01 A</h3>
+        </div>
+        <button onclick="toggleAiGuideModal()" class="text-slate-400 hover:text-slate-600 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-600 leading-relaxed">
+        
+        <div class="bg-sky-50 border border-sky-200 p-3.5 rounded-xl space-y-1">
+          <h4 class="font-bold text-sky-900 text-sm">1. Mengapa AI (LLM) Sangat Tepat untuk Data Mentah Copas?</h4>
+          <p>Teks hasil copy-paste dari portal rumah sakit, SIMRS, Puskesmas, atau chat WhatsApp tidak memiliki format yang seragam. Kadang nama ayah diawali "Tn.", ibu "Ny.", berat ditulis "3200 gr" atau "3.2 kg", dan tanggal ditulis format "Rabu Wage 18 Nov 2026". AI dapat memahami konteks semantik tersebut dan memetakannya langsung ke format baku Dukcapil.</p>
+        </div>
+
+        <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl space-y-1">
+          <h4 class="font-bold text-emerald-900 text-sm">2. Rekomendasi Model: Privasi vs Kecepatan</h4>
+          <ul class="list-disc pl-4 space-y-1.5 mt-2">
+            <li><strong>Opsi Terbaik untuk Privasi (Instansi / RS): Local AI via Ollama (Qwen 2.5 7B atau Llama 3.1 8B)</strong><br>
+              Data NIK, No. KK, dan identitas keluarga adalah <em>Personally Identifiable Information</em> (PII) yang dilindungi <strong>UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP)</strong>. Dengan model lokal Ollama, 100% komputasi AI berjalan di server internal tanpa ada 1 byte pun data yang keluar ke internet.</li>
+            <li><strong>Opsi Terbaik untuk Akurasi & Kecepatan: Google Gemini 2.5 Flash</strong><br>
+              Memiliki pemahaman Bahasa Indonesia yang luar biasa, latency sangat cepat (&plusmn;1 detik), dan mendukung <em>Structured JSON Outputs</em> sehingga output terjamin valid sesuai skema formulir F-2.01 A.</li>
+            <li><strong>Opsi Bawaan Tanpa Setup: Smart Regex Parser (Offline)</strong><br>
+              Sistem ini telah dilengkapi mesin regex pintar yang dapat mendeteksi pola 16 digit NIK, No KK, tanggal, jam, dan berat secara otomatis tanpa butuh API key atau internet sama sekali.</li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-100 p-3.5 rounded-xl space-y-1 font-mono text-[11px]">
+          <h4 class="font-bold font-sans text-slate-800 text-xs">3. Skema JSON Ekstraksi (Pydantic / Structured Output):</h4>
+          <p class="text-slate-500">Sistem mengirimkan instruksi sistem agar AI menghasilkan JSON terstruktur tanpa markdown wrapper:</p>
+          <pre class="bg-white p-2 rounded border border-slate-200 overflow-x-auto text-slate-700 mt-1">
+{
+  "jenis_pelaporan": "Kelahiran" | "Kematian",
+  "wilayah": { "provinsi": "...", "kabupaten_kota": "...", ... },
+  "pelapor": { "nama": "...", "nik": "16-digit", "nomor_kk": "..." },
+  "kelahiran": { "nama_bayi": "...", "jenis_kelamin": "...", ... }
+}</pre>
+        </div>
+
+      </div>
+
+      <div class="pt-3 border-t border-slate-200 flex justify-end">
+        <button onclick="toggleAiGuideModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-4 py-2 rounded-xl text-xs">
+          Tutup Panduan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // State
+    let currentExtractedData = null;
+    let currentPdfBlobUrl = null;
+    let currentInputMode = '5box'; // '5box' or '1box'
+    let currentOrtuMode = 'combined'; // 'combined' or 'split'
+    let currentEventType = 'Kelahiran'; // 'Kelahiran', 'Lahir Mati', 'Kematian'
+
+    // 3-WAY EVENT SELECTOR (KELAHIRAN / LAHIR MATI / KEMATIAN)
+    function selectEventType(type) {
+      currentEventType = type;
+      const btnK = document.getElementById("btnEventKelahiran");
+      const btnLM = document.getElementById("btnEventLahirMati");
+      const btnM = document.getElementById("btnEventKematian");
+      const badge = document.getElementById("activeEventBadge");
+      const boxTitle = document.getElementById("peristiwaBoxTitle");
+      const boxSubtitle = document.getElementById("peristiwaBoxSubtitle");
+      const textarea = document.getElementById("box_peristiwa");
+      const selectEditor = document.getElementById("f_jenis_pelaporan");
+
+      const baseClass = "py-2 px-2 rounded-xl border border-slate-200 font-semibold text-xs flex flex-col items-center justify-center transition-all bg-white hover:bg-slate-50 text-slate-700 cursor-pointer shadow-2xs";
+      btnK.className = baseClass;
+      btnLM.className = baseClass;
+      btnM.className = baseClass;
+
+      if (type === 'Kelahiran') {
+        btnK.className = "py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-sky-50 border-sky-500 text-sky-900 shadow-xs cursor-pointer";
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300";
+        badge.innerText = "👶 Kelahiran (Hal 1)";
+        if (boxTitle) boxTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-500"></span><span>1. Data Peristiwa: Kelahiran</span>`;
+        if (boxSubtitle) boxSubtitle.innerText = "RS/Bidan, Nama Bayi, Tanggal/Jam Lahir, BB, PB";
+        if (textarea) textarea.placeholder = "Tempel Surat Keterangan Kelahiran di sini...\nContoh: Nama Bayi: KENZIE ALFATIH, Lahir: 18 Nov 2026 07:45 WIB, RSIA Bunda Jakarta, BB: 3350 gr, PB: 50 cm, Dokter: dr. Robert Sp.OG";
+        if (selectEditor) selectEditor.value = "Kelahiran";
+      } else if (type === 'Lahir Mati') {
+        btnLM.className = "py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-amber-50 border-amber-500 text-amber-900 shadow-xs cursor-pointer";
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300";
+        badge.innerText = "🚼 Lahir Mati (Hal 2)";
+        if (boxTitle) boxTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>1. Data Peristiwa: Lahir Mati</span>`;
+        if (boxSubtitle) boxSubtitle.innerText = "Lamanya Kandungan (Bulan), Tanggal/Jam, RS, Sebab, Yang Menentukan";
+        if (textarea) textarea.placeholder = "Tempel Surat Keterangan Lahir Mati di sini...\nContoh: Lamanya dalam Kandungan: 8 Bulan, Lahir Mati: Jumat, 14 Nov 2026 10:30 WIB, RSUD Tarakan, Sebab: Asfiksia Berat, Penolong: Dokter Sp.OG";
+        if (selectEditor) selectEditor.value = "Lahir Mati";
+      } else { // Kematian
+        btnM.className = "py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-rose-50 border-rose-500 text-rose-900 shadow-xs cursor-pointer";
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300";
+        badge.innerText = "🕊️ Kematian (Hal 3)";
+        if (boxTitle) boxTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>1. Data Peristiwa: Kematian</span>`;
+        if (boxSubtitle) boxSubtitle.innerText = "Nama Almarhum, NIK, Tgl/Jam Kematian, Tempat Meninggal, Sebab";
+        if (textarea) textarea.placeholder = "Tempel Surat Keterangan Kematian di sini...\nContoh: Nama: RADEN SOERIPTO, NIK: 3174041503520001, Umur: 74 Thn, Wafat: Minggu, 15 Nov 2026 21:15 WIB di ICU RSUD Pasar Minggu, Sebab: Sakit biasa / tua";
+        if (selectEditor) selectEditor.value = "Kematian";
+      }
+    }
+
+    // Load saved settings
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedEngine = localStorage.getItem("f201a_engine") || "ollama";
+      document.getElementById("aiEngineSelect").value = savedEngine;
+      
+      const savedApiKey = localStorage.getItem("f201a_api_key") || "";
+      document.getElementById("apiKeyInput").value = savedApiKey;
+
+      onEngineChange();
+      checkOllamaStatus(false);
+
+      // Char counter for classic single textarea
+      const textarea = document.getElementById("rawTextarea");
+      if (textarea) {
+        textarea.addEventListener("input", () => {
+          const cc = document.getElementById("charCount");
+          if (cc) cc.innerText = `${textarea.value.length} karakter`;
+        });
+      }
+    });
+
+    // Toggle Input Mode: 5 Text Box vs 1 Global
+    function switchInputMode(mode) {
+      currentInputMode = mode;
+      const btn5Box = document.getElementById("btnTab5Box");
+      const btn1Box = document.getElementById("btnTab1Box");
+      const c5 = document.getElementById("container5Box");
+      const c1 = document.getElementById("container1Box");
+
+      if (mode === '5box') {
+        btn5Box.className = "px-2.5 py-1 rounded-md bg-white text-dukcapil-800 shadow-xs transition-all flex items-center space-x-1";
+        btn1Box.className = "px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all flex items-center space-x-1";
+        c5.classList.remove("hidden");
+        c1.classList.add("hidden");
+      } else {
+        btn1Box.className = "px-2.5 py-1 rounded-md bg-white text-dukcapil-800 shadow-xs transition-all flex items-center space-x-1";
+        btn5Box.className = "px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all flex items-center space-x-1";
+        c1.classList.remove("hidden");
+        c5.classList.add("hidden");
+      }
+    }
+
+    // Toggle Orang Tua Sub-mode: Combined vs Split
+    function toggleOrtuMode(mode) {
+      currentOrtuMode = mode;
+      const btnC = document.getElementById("btnOrtuCombined");
+      const btnS = document.getElementById("btnOrtuSplit");
+      const vC = document.getElementById("ortuCombinedView");
+      const vS = document.getElementById("ortuSplitView");
+
+      if (mode === 'combined') {
+        btnC.className = "px-1.5 py-0.5 rounded bg-white text-indigo-900 shadow-xs";
+        btnS.className = "px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900";
+        vC.classList.remove("hidden");
+        vS.classList.add("hidden");
+      } else {
+        btnS.className = "px-1.5 py-0.5 rounded bg-white text-indigo-900 shadow-xs";
+        btnC.className = "px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900";
+        vS.classList.remove("hidden");
+        vC.classList.add("hidden");
+      }
+    }
+
+    // Helper to collect current input payload based on active mode
+    function collectInputPayload() {
+      const engine = document.getElementById("aiEngineSelect").value;
+      const apiKey = document.getElementById("apiKeyInput").value.trim();
+      const host = document.getElementById("ollamaHostInput").value.trim();
+      const model = getEffectiveOllamaModel();
+
+      if (currentInputMode === '5box') {
+        const text_peristiwa = (document.getElementById("box_peristiwa")?.value || "").trim();
+        const text_pelapor = (document.getElementById("box_pelapor")?.value || "").trim();
+        const text_orangtua = (document.getElementById("box_orangtua")?.value || "").trim();
+        const text_ayah = (document.getElementById("box_ayah")?.value || "").trim();
+        const text_ibu = (document.getElementById("box_ibu")?.value || "").trim();
+        const text_saksi1 = (document.getElementById("box_saksi1")?.value || "").trim();
+        const text_saksi2 = (document.getElementById("box_saksi2")?.value || "").trim();
+
+        const hasAny = text_peristiwa || text_pelapor || text_orangtua || text_ayah || text_ibu || text_saksi1 || text_saksi2;
+        if (!hasAny) {
+          throw new Error("Silakan isi teks pada salah satu atau lebih kotak input (Data Peristiwa, Pelapor, Orang Tua, Saksi I, Saksi II).");
+        }
+
+        // Build combined text as well
+        const parts = [];
+        if (text_peristiwa) parts.push(`[DATA PERISTIWA]\n${text_peristiwa}`);
+        if (text_pelapor) parts.push(`[DATA PELAPOR]\n${text_pelapor}`);
+        if (text_ayah) parts.push(`[DATA AYAH]\n${text_ayah}`);
+        if (text_ibu) parts.push(`[DATA IBU]\n${text_ibu}`);
+        if (text_orangtua && !(text_ayah && text_ibu)) parts.push(`[DATA ORANG TUA]\n${text_orangtua}`);
+        if (text_saksi1) parts.push(`[DATA SAKSI I]\n${text_saksi1}`);
+        if (text_saksi2) parts.push(`[DATA SAKSI II]\n${text_saksi2}`);
+
+        return {
+          jenis_pelaporan: currentEventType,
+          ai_engine: engine,
+          api_key: apiKey,
+          ollama_host: host,
+          model_name: model,
+          raw_text: parts.join("\n\n"),
+          text_peristiwa,
+          text_pelapor,
+          text_orangtua,
+          text_ayah,
+          text_ibu,
+          text_saksi1,
+          text_saksi2
+        };
+      } else {
+        const raw_text = (document.getElementById("rawTextarea")?.value || "").trim();
+        if (!raw_text) {
+          throw new Error("Silakan tempel teks mentah terlebih dahulu.");
+        }
+        return {
+          jenis_pelaporan: currentEventType,
+          ai_engine: engine,
+          api_key: apiKey,
+          ollama_host: host,
+          model_name: model,
+          raw_text
+        };
+      }
+    }
+
+    function toggleConfigAccordion() {
+      const content = document.getElementById("configContent");
+      const chevron = document.getElementById("accordionChevron");
+      content.classList.toggle("hidden");
+      chevron.classList.toggle("rotate-180");
+    }
+
+    function toggleAiGuideModal() {
+      document.getElementById("aiGuideModal").classList.toggle("hidden");
+    }
+
+    function toggleApiKeyVisibility() {
+      const input = document.getElementById("apiKeyInput");
+      input.type = input.type === "password" ? "text" : "password";
+    }
+
+    function getEffectiveOllamaModel() {
+      const sel = document.getElementById("ollamaModelSelect");
+      if (sel && sel.value === "custom") {
+        return document.getElementById("ollamaModelInputCustom").value.trim() || "qwen2.5:7b";
+      }
+      return sel ? sel.value : "qwen2.5:7b";
+    }
+
+    function onOllamaModelSelectChange() {
+      const sel = document.getElementById("ollamaModelSelect");
+      const customInput = document.getElementById("ollamaModelInputCustom");
+      if (sel.value === "custom") {
+        customInput.classList.remove("hidden");
+        customInput.focus();
+      } else {
+        customInput.classList.add("hidden");
+      }
+    }
+
+    async function checkOllamaStatus(isManual = false) {
+      const host = document.getElementById("ollamaHostInput").value.trim() || "http://localhost:11434";
+      const badge = document.getElementById("ollamaStatusBadge");
+      const helper = document.getElementById("ollamaOfflineHelper");
+
+      if (badge) {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span>Mengecek...</span>`;
+      }
+
+      try {
+        const resp = await fetch(`/api/ollama/status?host=${encodeURIComponent(host)}`);
+        const data = await resp.json();
+
+        if (data.online) {
+          badge.className = "flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-medium";
+          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Online (${data.count} model lokal)</span>`;
+          helper.classList.add("hidden");
+
+          if (data.models && data.models.length > 0) {
+            const select = document.getElementById("ollamaModelSelect");
+            const existingValues = Array.from(select.options).map(o => o.value);
+            data.models.forEach(m => {
+              if (!existingValues.includes(m)) {
+                const opt = document.createElement("option");
+                opt.value = m;
+                opt.innerText = `${m} (Terinstal)`;
+                select.insertBefore(opt, select.firstChild);
+              }
+            });
+            select.value = data.models[0];
+          }
+
+          if (isManual) showAlert(`Ollama aktif di ${host}! Terdeteksi ${data.count} model lokal.`, "success");
+        } else {
+          badge.className = "flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-medium";
+          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Offline</span>`;
+          helper.classList.remove("hidden");
+          if (isManual) showAlert(`Ollama belum aktif di ${host}. Sistem otomatis menggunakan Smart Regex Parser bawaan.`, "info");
+        }
+      } catch (err) {
+        if (badge) {
+          badge.className = "flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-medium";
+          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Offline</span>`;
+        }
+        if (helper) helper.classList.remove("hidden");
+      }
+    }
+
+    function onEngineChange() {
+      const engine = document.getElementById("aiEngineSelect").value;
+      localStorage.setItem("f201a_engine", engine);
+
+      const apiKeyGroup = document.getElementById("apiKeyGroup");
+      const apiKeyLabel = document.getElementById("apiKeyLabel");
+      const ollamaGroup = document.getElementById("ollamaGroup");
+      const engineHint = document.getElementById("engineHint");
+      const badge = document.getElementById("currentEngineBadge");
+
+      if (engine === "ollama") {
+        badge.innerText = "Local Ollama (100% Offline & Privat)";
+        badge.className = "text-emerald-700 font-bold";
+        apiKeyGroup.classList.add("hidden");
+        ollamaGroup.classList.remove("hidden");
+        engineHint.innerText = "Berjalan 100% lokal di komputer Anda. Data kependudukan tidak pernah keluar ke internet (Kepatuhan UU PDP).";
+        checkOllamaStatus(false);
+      } else if (engine === "gemini") {
+        badge.innerText = "Google Gemini AI (Cloud)";
+        badge.className = "text-sky-600 font-bold";
+        apiKeyGroup.classList.remove("hidden");
+        ollamaGroup.classList.add("hidden");
+        apiKeyLabel.innerText = "API Key Gemini:";
+        engineHint.innerText = "Menggunakan Gemini 2.5 Flash via official SDK. Sangat cepat & akurat untuk Bahasa Indonesia.";
+      } else if (engine === "openai") {
+        badge.innerText = "OpenAI GPT (Cloud)";
+        badge.className = "text-violet-600 font-bold";
+        apiKeyGroup.classList.remove("hidden");
+        ollamaGroup.classList.add("hidden");
+        apiKeyLabel.innerText = "API Key OpenAI:";
+        engineHint.innerText = "Menggunakan model gpt-4o-mini dengan format JSON terstruktur.";
+      } else {
+        badge.innerText = "Smart Regex (Offline)";
+        badge.className = "text-slate-600 font-bold";
+        apiKeyGroup.classList.add("hidden");
+        ollamaGroup.classList.add("hidden");
+        engineHint.innerText = "Bekerja langsung tanpa API Key atau LLM. Mengenali pola NIK, KK, tanggal, jam, berat, dan faskes secara instan.";
+      }
+    }
+
+    // Save API Key on change
+    document.getElementById("apiKeyInput").addEventListener("input", (e) => {
+      localStorage.setItem("f201a_api_key", e.target.value);
+    });
+
+    // Sample data loader
+    async function loadSample(sampleId) {
+      if (sampleId === 'rsia_bunda' || sampleId === 'puskesmas') {
+        selectEventType('Kelahiran');
+      } else if (sampleId === 'lahir_mati') {
+        selectEventType('Lahir Mati');
+      } else if (sampleId === 'kematian') {
+        selectEventType('Kematian');
+      }
+
+      showLoading(true, "Memuat contoh data mentah...");
+      try {
+        const resp = await fetch(`/api/sample-data/${sampleId}`);
+        const data = await resp.json();
+        
+        // Fill 5 Boxes
+        if (data.sections) {
+          if (document.getElementById("box_peristiwa")) document.getElementById("box_peristiwa").value = data.sections.peristiwa || "";
+          if (document.getElementById("box_pelapor")) document.getElementById("box_pelapor").value = data.sections.pelapor || "";
+          if (document.getElementById("box_orangtua")) document.getElementById("box_orangtua").value = data.sections.orangtua || "";
+          if (document.getElementById("box_ayah")) document.getElementById("box_ayah").value = data.sections.ayah || "";
+          if (document.getElementById("box_ibu")) document.getElementById("box_ibu").value = data.sections.ibu || "";
+          if (document.getElementById("box_saksi1")) document.getElementById("box_saksi1").value = data.sections.saksi1 || "";
+          if (document.getElementById("box_saksi2")) document.getElementById("box_saksi2").value = data.sections.saksi2 || "";
+        }
+        
+        // Also fill classic rawTextarea
+        const textarea = document.getElementById("rawTextarea");
+        if (textarea) {
+          textarea.value = data.text;
+          const cc = document.getElementById("charCount");
+          if (cc) cc.innerText = `${data.text.length} karakter`;
+        }
+        
+        showAlert("Contoh data berhasil dimuat ke dalam kotak input. Klik 'Generate PDF' untuk langsung memproses.", "info");
+      } catch (err) {
+        showAlert("Gagal memuat sample: " + err.message, "error");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function clearInput() {
+      ["box_peristiwa", "box_pelapor", "box_orangtua", "box_ayah", "box_ibu", "box_saksi1", "box_saksi2", "rawTextarea"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      const cc = document.getElementById("charCount");
+      if (cc) cc.innerText = "0 karakter";
+      showAlert("Semua kotak input telah dibersihkan.", "info");
+    }
+
+    // Switch right panel tabs
+    function switchTab(tab) {
+      const tabBtnPdf = document.getElementById("tabBtnPdf");
+      const tabBtnData = document.getElementById("tabBtnData");
+      const contentPdf = document.getElementById("tabContentPdf");
+      const contentData = document.getElementById("tabContentData");
+
+      if (tab === "pdf") {
+        tabBtnPdf.className = "px-4 py-2 text-xs font-bold rounded-t-lg border-b-2 border-dukcapil-600 text-dukcapil-900 bg-white flex items-center space-x-1.5";
+        tabBtnData.className = "px-4 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-1.5";
+        contentPdf.classList.remove("hidden");
+        contentData.classList.add("hidden");
+      } else {
+        tabBtnData.className = "px-4 py-2 text-xs font-bold rounded-t-lg border-b-2 border-dukcapil-600 text-dukcapil-900 bg-white flex items-center space-x-1.5";
+        tabBtnPdf.className = "px-4 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-1.5";
+        contentData.classList.remove("hidden");
+        contentPdf.classList.add("hidden");
+      }
+    }
+
+    function showLoading(show, message = "Memproses...") {
+      const overlay = document.getElementById("loadingOverlay");
+      const text = document.getElementById("loadingText");
+      if (show) {
+        text.innerText = message;
+        overlay.classList.remove("hidden");
+      } else {
+        overlay.classList.add("hidden");
+      }
+    }
+
+    function showAlert(msg, type = "info") {
+      const alert = document.getElementById("statusAlert");
+      alert.classList.remove("hidden", "bg-emerald-50", "text-emerald-800", "border-emerald-200", "bg-red-50", "text-red-800", "border-red-200", "bg-sky-50", "text-sky-800", "border-sky-200");
+      
+      let borderClass = "border";
+      if (type === "success") {
+        alert.classList.add("bg-emerald-50", "text-emerald-800", "border-emerald-200", borderClass);
+      } else if (type === "error") {
+        alert.classList.add("bg-red-50", "text-red-800", "border-red-200", borderClass);
+      } else {
+        alert.classList.add("bg-sky-50", "text-sky-800", "border-sky-200", borderClass);
+      }
+      alert.innerHTML = `<span>${msg}</span>`;
+      setTimeout(() => alert.classList.add("hidden"), 7000);
+    }
+
+    // 1-CLICK: GENERATE PDF DIRECTLY
+    async function handleGeneratePdfDirect() {
+      let payload;
+      try {
+        payload = collectInputPayload();
+      } catch (err) {
+        showAlert(err.message, "error");
+        return;
+      }
+
+      showLoading(true, "AI mendeteksi data & menghasilkan Formulir F-2.01 A...");
+
+      try {
+        // Step 1: Extract data first so we also have the data model populated in editor
+        const extResp = await fetch("/api/extract", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+
+        if (!extResp.ok) throw new Error("Gagal mengekstrak data dari inputan.");
+        const extResult = await extResp.json();
+        currentExtractedData = extResult.data;
+        populateEditorFields(currentExtractedData);
+
+        // Step 2: Generate PDF directly from extracted data
+        const pdfResp = await fetch("/api/generate-pdf", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            data: currentExtractedData,
+            single_page: true
+          })
+        });
+
+        if (!pdfResp.ok) throw new Error("Gagal membuat file PDF.");
+        const blob = await pdfResp.blob();
+        displayPdfBlob(blob);
+
+        switchTab("pdf");
+        showAlert("Berhasil! Formulir F-2.01 A telah digenerate dari data mentah.", "success");
+
+      } catch (err) {
+        showAlert("Terjadi kesalahan: " + err.message, "error");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // SECONDARY ACTION: EXTRACT & REVIEW IN EDITOR
+    async function handleExtractReview() {
+      let payload;
+      try {
+        payload = collectInputPayload();
+      } catch (err) {
+        showAlert(err.message, "error");
+        return;
+      }
+
+      showLoading(true, "Menganalisis dan mengekstrak elemen data...");
+
+      try {
+        const resp = await fetch("/api/extract", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) throw new Error("Gagal mengekstrak data.");
+        const result = await resp.json();
+        currentExtractedData = result.data;
+        populateEditorFields(currentExtractedData);
+        switchTab("data");
+        showAlert("Elemen data berhasil dideteksi! Anda dapat meninjau atau mengeditnya di tab data.", "success");
+      } catch (err) {
+        showAlert("Gagal: " + err.message, "error");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // RE-GENERATE FROM TAB 2 (EDITOR)
+    async function handleGenerateFromEditor() {
+      const data = collectEditorData();
+      currentExtractedData = data;
+      showLoading(true, "Memperbarui formulir PDF F-2.01 A...");
+
+      try {
+        const pdfResp = await fetch("/api/generate-pdf", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            data: currentExtractedData,
+            single_page: true
+          })
+        });
+
+        if (!pdfResp.ok) throw new Error("Gagal generate PDF.");
+        const blob = await pdfResp.blob();
+        displayPdfBlob(blob);
+        switchTab("pdf");
+        showAlert("PDF berhasil diperbarui sesuai perubahan elemen data Anda!", "success");
+      } catch (err) {
+        showAlert("Error: " + err.message, "error");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Display PDF in iframe
+    function displayPdfBlob(blob) {
+      if (currentPdfBlobUrl) {
+        URL.revokeObjectURL(currentPdfBlobUrl);
+      }
+      currentPdfBlobUrl = URL.createObjectURL(blob);
+      
+      const iframe = document.getElementById("pdfIframe");
+      const emptyState = document.getElementById("emptyPdfState");
+      const actionButtons = document.getElementById("pdfActionButtons");
+
+      iframe.src = currentPdfBlobUrl;
+      iframe.classList.remove("hidden");
+      emptyState.classList.add("hidden");
+      actionButtons.classList.remove("hidden");
+    }
+
+    function downloadCurrentPdf() {
+      if (!currentPdfBlobUrl) return;
+      const a = document.createElement("a");
+      a.href = currentPdfBlobUrl;
+      const jenis = currentExtractedData?.jenis_pelaporan || "Kelahiran";
+      a.download = `Formulir_F201A_${jenis}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function openPdfInNewTab() {
+      if (currentPdfBlobUrl) {
+        window.open(currentPdfBlobUrl, "_blank");
+      }
+    }
+
+    // Populate Fields into Tab 2
+    function populateEditorFields(d) {
+      if (!d) return;
+
+      document.getElementById("f_jenis_pelaporan").value = d.jenis_pelaporan || "Kelahiran";
+      document.getElementById("f_wilayah_provinsi").value = d.wilayah?.provinsi || "";
+      document.getElementById("f_wilayah_kab_kota").value = d.wilayah?.kabupaten_kota || "";
+      document.getElementById("f_wilayah_kecamatan").value = d.wilayah?.kecamatan || "";
+      document.getElementById("f_wilayah_kelurahan").value = d.wilayah?.desa_kelurahan || "";
+
+      const kel = d.kelahiran || {};
+      document.getElementById("f_bayi_nama").value = kel.nama_bayi || d.subjek_akta?.nama || "";
+      document.getElementById("f_bayi_jk").value = kel.jenis_kelamin || "Laki-Laki";
+      document.getElementById("f_bayi_faskes").value = kel.nama_faskes || kel.tempat_dilahirkan || "";
+      document.getElementById("f_bayi_hari").value = kel.hari_lahir || "";
+      document.getElementById("f_bayi_tgl").value = kel.tgl_lahir || "";
+      document.getElementById("f_bayi_bln").value = kel.bln_lahir || "";
+      document.getElementById("f_bayi_thn").value = kel.thn_lahir || "";
+      document.getElementById("f_bayi_jam").value = kel.pukul_jam || "";
+      document.getElementById("f_bayi_menit").value = kel.pukul_menit || "";
+      document.getElementById("f_bayi_berat").value = kel.berat_bayi_kg || "";
+      document.getElementById("f_bayi_panjang").value = kel.panjang_bayi_cm || "";
+
+      document.getElementById("f_ayah_nama").value = d.ayah?.nama || "";
+      document.getElementById("f_ayah_nik").value = d.ayah?.nik || "";
+      document.getElementById("f_ibu_nama").value = d.ibu?.nama || "";
+      document.getElementById("f_ibu_nik").value = d.ibu?.nik || "";
+
+      document.getElementById("f_nomor_kk").value = d.pelapor?.nomor_kk || d.subjek_akta?.nomor_kk || "";
+      document.getElementById("f_pelapor_nama").value = d.pelapor?.nama || "";
+      document.getElementById("f_pelapor_nik").value = d.pelapor?.nik || "";
+
+      // Count detected non-empty fields
+      let count = 0;
+      const countFields = (obj) => {
+        if (!obj) return;
+        for (let k in obj) {
+          if (typeof obj[k] === "object") countFields(obj[k]);
+          else if (obj[k]) count++;
+        }
+      };
+      countFields(d);
+      document.getElementById("detectedCount").innerText = count;
+    }
+
+    // Collect editor inputs back into data model
+    function collectEditorData() {
+      const base = currentExtractedData || {};
+      base.jenis_pelaporan = document.getElementById("f_jenis_pelaporan").value;
+      base.wilayah = base.wilayah || {};
+      base.wilayah.provinsi = document.getElementById("f_wilayah_provinsi").value;
+      base.wilayah.kabupaten_kota = document.getElementById("f_wilayah_kab_kota").value;
+      base.wilayah.kecamatan = document.getElementById("f_wilayah_kecamatan").value;
+      base.wilayah.desa_kelurahan = document.getElementById("f_wilayah_kelurahan").value;
+
+      base.kelahiran = base.kelahiran || {};
+      base.kelahiran.nama_bayi = document.getElementById("f_bayi_nama").value;
+      base.kelahiran.jenis_kelamin = document.getElementById("f_bayi_jk").value;
+      base.kelahiran.nama_faskes = document.getElementById("f_bayi_faskes").value;
+      base.kelahiran.hari_lahir = document.getElementById("f_bayi_hari").value;
+      base.kelahiran.tgl_lahir = document.getElementById("f_bayi_tgl").value;
+      base.kelahiran.bln_lahir = document.getElementById("f_bayi_bln").value;
+      base.kelahiran.thn_lahir = document.getElementById("f_bayi_thn").value;
+      base.kelahiran.pukul_jam = document.getElementById("f_bayi_jam").value;
+      base.kelahiran.pukul_menit = document.getElementById("f_bayi_menit").value;
+      base.kelahiran.berat_bayi_kg = document.getElementById("f_bayi_berat").value;
+      base.kelahiran.panjang_bayi_cm = document.getElementById("f_bayi_panjang").value;
+
+      base.subjek_akta = base.subjek_akta || {};
+      base.subjek_akta.nama = base.kelahiran.nama_bayi;
+
+      base.ayah = base.ayah || {};
+      base.ayah.nama = document.getElementById("f_ayah_nama").value;
+      base.ayah.nik = document.getElementById("f_ayah_nik").value;
+
+      base.ibu = base.ibu || {};
+      base.ibu.nama = document.getElementById("f_ibu_nama").value;
+      base.ibu.nik = document.getElementById("f_ibu_nik").value;
+
+      base.pelapor = base.pelapor || {};
+      base.pelapor.nomor_kk = document.getElementById("f_nomor_kk").value;
+      base.pelapor.nama = document.getElementById("f_pelapor_nama").value;
+      base.pelapor.nik = document.getElementById("f_pelapor_nik").value;
+
+      return base;
+    }
+  </script>
+</body>
+</html>
