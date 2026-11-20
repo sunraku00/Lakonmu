@@ -6,44 +6,73 @@ Sistem ini didesain **100% Stateless & Zero-Storage** — tidak ada database dan
 
 ---
 
-## 🐳 Cara Menjalankan dengan Docker (Paling Mudah)
+## 🤝 Panduan Setup & Menjalankan untuk Tim (Kolaborator)
 
-Pihak lain atau server deployment cukup memiliki **Docker & Docker Compose** terinstal di komputernya.
+Project ini didesain agar sangat mudah dijalankan di komputer mana pun tanpa konflik konfigurasi environment (`.venv` bersifat lokal dan otomatis terabaikan di Git melalui `.gitignore`).
 
-### 1. Jalankan Aplikasi
-Buka Terminal / Command Prompt / PowerShell di folder ini, lalu jalankan:
+---
 
+### 🐳 Opsi 1: Menggunakan Docker (Rekomendasi Utama - Paling Mudah)
+Jika teman Anda memiliki **Docker Desktop** terpasang, mereka **tidak perlu menginstall Python sama sekali**:
+
+1. Buka Terminal / CMD / PowerShell di dalam folder project ini.
+2. Jalankan perintah:
+   ```bash
+   docker compose up -d
+   ```
+   *(Atau `docker compose up --build -d` jika baru saja pull pembaruan kode).*
+3. Buka peramban di: 👉 **[http://localhost:8000](http://localhost:8000)**
+4. Untuk menghentikan: `docker compose down`
+
+---
+
+### ⚡ Opsi 2: Windows 1-Click Launcher (Sangat Praktis untuk Windows)
+Jika teman Anda menggunakan Windows dan memiliki Python:
+
+1. Pastikan Python 3.10+ sudah terpasang dan dicentang opsi *"Add Python to PATH"*.
+2. Cukup **Klik Ganda (Double Click)** file **`run.bat`**.
+3. **`run.bat` secara otomatis akan:**
+   - Mendeteksi apakah folder `.venv` sudah ada. Jika belum, otomatis membuat `.venv` lokal baru untuk perangkat teman Anda.
+   - Mengaktifkan `.venv`.
+   - Menginstall seluruh library dari `requirements.txt` secara otomatis.
+   - Membuka browser ke `http://localhost:8000` dan menyalakan server!
+
+---
+
+### 💻 Opsi 3: Manual Terminal Setup (VS Code / Terminal / Linux / Mac)
+Jika teman Anda terbiasa menggunakan terminal manual:
+
+**Windows (PowerShell / Command Prompt):**
 ```bash
-docker compose up -d
+# 1. Buat virtual environment lokal
+python -m venv .venv
+
+# 2. Aktifkan virtual environment
+# Jika PowerShell:
+.\.venv\Scripts\Activate.ps1
+# Jika Command Prompt (CMD):
+.venv\Scripts\activate.bat
+
+# 3. Pasang semua pustaka
+pip install -r requirements.txt
+
+# 4. Jalankan aplikasi
+python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
-*(Atau `docker compose up` jika ingin melihat log server langsung di terminal).*
 
-### 2. Buka Aplikasi di Browser
-Buka peramban di:
-👉 **[http://localhost:8000](http://localhost:8000)**
-
-### 3. Menghentikan Aplikasi
+**Linux / macOS:**
 ```bash
-docker compose down
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ---
 
-## 💻 Cara Menjalankan Tanpa Docker (Native Python)
-
-Jika ingin menjalankan langsung di sistem host:
-
-1. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Jalankan Server:**
-   * Di Windows: Cukup klik ganda file `run.bat`
-   * Atau via terminal:
-     ```bash
-     python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-     ```
-3. Buka **[http://localhost:8000](http://localhost:8000)** di browser.
+> [!NOTE]
+> **Mengapa file `.venv` dan `pyvenv.cfg` tidak di-share ke Git?**
+> File `pyvenv.cfg` dan seluruh folder `.venv` berisi path absolut spesifik ke user & direktori sistem operasi komputer Anda (misal: `C:\Users\KicenZeus\...`). Jika folder tersebut dipush ke Git dan di-clone oleh teman Anda, Python mereka akan error karena direktori tersebut tidak ada di komputer mereka. Oleh sebab itu, setiap komputer harus membuat `.venv` lokalnya sendiri (yang kini sudah diotomatisasi penuh oleh `run.bat` atau Docker).
 
 ---
 

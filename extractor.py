@@ -282,9 +282,12 @@ def extract_with_smart_regex(raw_text: str) -> Dict[str, Any]:
         if "provinsi" in ll:
             m = re.search(r"provinsi\s*[:=]?\s*([a-zA-Z\s]+)", line, re.I)
             if m: data["wilayah"]["provinsi"] = m.group(1).strip()
-        if any(k in ll for k in ["kabupaten", "kota"]):
+        if any(k in ll for k in ["kabupaten", "kota"]) and "kelahiran" not in ll:
             m = re.search(r"(?:kabupaten|kota)\s*[:=]?\s*([a-zA-Z\s]+)", line, re.I)
             if m: data["wilayah"]["kabupaten_kota"] = m.group(1).strip()
+        if "kota kelahiran" in ll or "tempat kelahiran" in ll:
+            m = re.search(r"(?:kota\s*kelahiran|tempat\s*kelahiran)\s*[:=]?\s*([a-zA-Z\s]+)", line, re.I)
+            if m: data["kelahiran"]["tempat_kelahiran"] = m.group(1).strip()
         if "kecamatan" in ll:
             m = re.search(r"kecamatan\s*[:=]?\s*([a-zA-Z\s]+)", line, re.I)
             if m: data["wilayah"]["kecamatan"] = m.group(1).strip()
@@ -598,6 +601,11 @@ def parse_peristiwa_snippet(text: str, jenis: str = "Kelahiran") -> Dict[str, An
     ll = text.lower()
     lines = [l.strip() for l in text.strip().splitlines() if l.strip()]
 
+    # 0. NIK pada teks peristiwa (misal Jenazah pada Kematian)
+    nik_p_m = re.search(r"\b(\d{16})\b", text)
+    if nik_p_m:
+        res["nik"] = nik_p_m.group(1)
+
     # 1. Nama Bayi / Subjek Akta / Jenazah
     for line in lines:
         m_fwd = re.search(r"^(?:nama\s*(?:bayi|anak|jenazah|lengkap)?|bayi\s*ny\.?|almarhum(?:ah)?)[\s:=	]+([a-zA-Z\s\'.]+)$", line, re.I)
@@ -683,21 +691,37 @@ def parse_peristiwa_snippet(text: str, jenis: str = "Kelahiran") -> Dict[str, An
             res["tempat_dilahirkan"] = "RS/RB"
 
     # 10. Penolong
-    if "bidan" in ll or "perawat" in ll:
-        res["penolong_kelahiran"] = "Bidan/Perawat"
-    elif "dokter" in ll or "dr." in ll:
+    if re.search(r"\b(?:dokter|dr\.)\b", ll):
         res["penolong_kelahiran"] = "Dokter"
+    elif re.search(r"\b(?:bidan|perawat)\b", ll):
+        res["penolong_kelahiran"] = "Bidan/Perawat"
+    elif re.search(r"\bdukun\b", ll):
+        res["penolong_kelahiran"] = "Dukun"
 
-    # 11. Khusus Lahir Mati: Usia Kandungan & Sebab
-    uk_m = (re.search(r"(?:usia\s*kandungan|gestasi|umur\s*kandungan)[\s:=	]*(\d{1,2})\s*(?:minggu|bulan)?", text, re.I) or
-            re.search(r"(\d{1,2})\s*(?:minggu|bulan)?[\s:=	]*(?:usia\s*kandungan|gestasi|umur\s*kandungan)\b", text, re.I))
+    # 11. Khusus Lahir Mati & Kematian: Usia Kandungan, Sebab, Tempat, Yang Menerangkan
+    uk_m = (re.search(r"(?:usia\s*kandungan|gestasi|umur\s*kandungan|lamanya\s*(?:dalam\s*)?kandungan)[\s:=	]*(\d{1,2})\s*(?:minggu|bulan)?", text, re.I) or
+            re.search(r"(\d{1,2})\s*(?:minggu|bulan)?[\s:=	]*(?:usia\s*kandungan|gestasi|umur\s*kandungan|lamanya\s*(?:dalam\s*)?kandungan)\b", text, re.I))
     if uk_m:
         res["usia_kandungan"] = uk_m.group(1)
 
-    sebab_m = (re.search(r"(?:sebab|penyebab|diagnosa|karena)[\s:=	]*([^\n\r,]+)", text, re.I) or
-               re.search(r"([^\n\r,]+?)[\s:=	]*(?:sebab|penyebab|diagnosa)\b", text, re.I))
+    sebab_m = (re.search(r"(?:sebab(?:\s*kematian|\s*lahir\s*mati)?|penyebab|diagnosa|karena)[\s:=	]*([^\n\r,]+)", text, re.I) or
+               re.search(r"([^\n\r,]+?)[\s:=	]*(?:sebab(?:\s*kematian|\s*lahir\s*mati)?|penyebab|diagnosa)\b", text, re.I))
     if sebab_m:
         res["sebab"] = sebab_m.group(1).strip()
+
+    tk_m = re.search(r"(?:tempat\s*(?:kematian|meninggal)|meninggal\s*di)[\s:=	]*([^\n\r]+)", text, re.I)
+    if tk_m:
+        res["tempat_kematian"] = tk_m.group(1).strip()
+
+    ym_m = re.search(r"(?:yang\s*menerangkan|penerang)[\s:=	]*([^\n\r]+)", text, re.I)
+    if ym_m:
+        res["yang_menerangkan"] = ym_m.group(1).strip()
+    elif re.search(r"\b(?:dokter|dr\.)\b", ll):
+        res["yang_menerangkan"] = "Dokter"
+
+    t_kel_m = re.search(r"(?:kota\s*kelahiran|tempat\s*kelahiran)[\s:=	]*([^\n\r]+)", text, re.I)
+    if t_kel_m:
+        res["tempat_kelahiran"] = t_kel_m.group(1).strip()
 
     return res
 
@@ -816,6 +840,22 @@ def extract_from_sections(
                 result.setdefault("kelahiran", {})["tempat_dilahirkan"] = p_info["tempat_dilahirkan"]
         if p_info.get("penolong_kelahiran"):
             result.setdefault("kelahiran", {})["penolong_kelahiran"] = p_info["penolong_kelahiran"]
+        if p_info.get("nik") and result.get("jenis_pelaporan") == "Kematian":
+            result.setdefault("kematian", {})["nik"] = p_info["nik"]
+            result.setdefault("subjek_akta", {})["nik"] = p_info["nik"]
+        if p_info.get("tempat_kelahiran"):
+            result.setdefault("kelahiran", {})["tempat_kelahiran"] = p_info["tempat_kelahiran"]
+        if p_info.get("tempat_kematian") and result.get("jenis_pelaporan") == "Kematian":
+            result.setdefault("kematian", {})["tempat_kematian"] = p_info["tempat_kematian"]
+        if p_info.get("yang_menerangkan") and result.get("jenis_pelaporan") == "Kematian":
+            result.setdefault("kematian", {})["yang_menerangkan"] = p_info["yang_menerangkan"]
+        if p_info.get("sebab"):
+            if result.get("jenis_pelaporan") == "Kematian":
+                result.setdefault("kematian", {})["sebab_kematian"] = p_info["sebab"]
+            elif result.get("jenis_pelaporan") == "Lahir Mati":
+                result.setdefault("lahir_mati", {})["sebab"] = p_info["sebab"]
+        if p_info.get("usia_kandungan"):
+            result.setdefault("lahir_mati", {})["lama_kandungan_bulan"] = p_info["usia_kandungan"]
 
     # Enforce keakuratan dari masing-masing kotak spesifik
     if pelapor_text:

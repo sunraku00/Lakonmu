@@ -494,6 +494,7 @@ AI & Smart Regex akan otomatis mendeteksi: NIK, Nama Bayi/Almarhum, No KK, Ayah,
             
             <!-- ACTION BUTTONS FOR PDF -->
             <div id="pdfActionButtons" class="flex items-center space-x-2 pb-1.5 hidden">
+              <span id="pdfFilenameBadge" class="text-[11px] font-mono text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md max-w-[220px] truncate hidden sm:inline-block"></span>
               <button type="button" onclick="downloadCurrentPdf()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm flex items-center space-x-1 transition-all">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 <span>Unduh PDF</span>
@@ -1171,7 +1172,8 @@ AI & Smart Regex akan otomatis mendeteksi: NIK, Nama Bayi/Almarhum, No KK, Ayah,
 
         if (!pdfResp.ok) throw new Error("Gagal membuat file PDF.");
         const blob = await pdfResp.blob();
-        displayPdfBlob(blob);
+        const fnHeader = pdfResp.headers.get("X-Suggested-Filename");
+        displayPdfBlob(blob, fnHeader);
 
         switchTab("pdf");
         showAlert("Berhasil! Formulir F-2.01 A telah digenerate dari data mentah.", "success");
@@ -1233,7 +1235,8 @@ AI & Smart Regex akan otomatis mendeteksi: NIK, Nama Bayi/Almarhum, No KK, Ayah,
 
         if (!pdfResp.ok) throw new Error("Gagal generate PDF.");
         const blob = await pdfResp.blob();
-        displayPdfBlob(blob);
+        const fnHeader = pdfResp.headers.get("X-Suggested-Filename");
+        displayPdfBlob(blob, fnHeader);
         switchTab("pdf");
         showAlert("PDF berhasil diperbarui sesuai perubahan elemen data Anda!", "success");
       } catch (err) {
@@ -1243,8 +1246,95 @@ AI & Smart Regex akan otomatis mendeteksi: NIK, Nama Bayi/Almarhum, No KK, Ayah,
       }
     }
 
+    // Helper to generate dynamic filename: [tgl-bln-thn (angka)] - [NAMA].pdf
+    function getPdfDownloadFilename(data) {
+      if (!data) data = currentExtractedData || {};
+      if (data._suggested_filename) return data._suggested_filename;
+
+      const jenis = (data.jenis_pelaporan || "Kelahiran").toLowerCase();
+      const kel = data.kelahiran || {};
+      const kem = data.kematian || {};
+      const lm = data.lahir_mati || {};
+      const subjek = data.subjek_akta || {};
+      const ibu = data.ibu || {};
+      const pelapor = data.pelapor || {};
+
+      const bulanMap = {
+        "januari": "01", "jan": "01", "februari": "02", "feb": "02",
+        "maret": "03", "mar": "03", "april": "04", "apr": "04",
+        "mei": "05", "juni": "06", "jun": "06", "juli": "07", "jul": "07",
+        "agustus": "08", "agu": "08", "agt": "08", "september": "09", "sep": "09",
+        "oktober": "10", "okt": "10", "november": "11", "nov": "11",
+        "desember": "12", "des": "12"
+      };
+
+      function parseDate(str) {
+        if (!str) return null;
+        const m = String(str).match(/\b(\d{1,2})[\s/-]([0-1]?\d|[a-zA-Z]+)[\s/-](\d{4})\b/);
+        if (m) {
+          const d = String(m[1]).padStart(2, "0");
+          const rawM = m[2].toLowerCase();
+          const mo = bulanMap[rawM] || (rawM.length <= 2 ? rawM.padStart(2, "0") : rawM);
+          const y = m[3];
+          return `${d}-${mo}-${y}`;
+        }
+        return null;
+      }
+
+      let nameStr = "";
+      let dateStr = null;
+
+      if (jenis.includes("mati") && jenis.includes("lahir")) {
+        nameStr = subjek.nama || kel.nama_bayi || (ibu.nama ? `BAYI NY ${ibu.nama}` : null) || pelapor.nama || "BAYI LAHIR MATI";
+        dateStr = parseDate(lm.tanggal) || parseDate(kel.tanggal_lengkap);
+        if (!dateStr && (lm.thn || kel.thn_lahir)) {
+          const d = String(lm.tgl || kel.tgl_lahir || "01").padStart(2, "0");
+          const mRaw = String(lm.bln || kel.bln_lahir || "01").toLowerCase();
+          const m = bulanMap[mRaw] || mRaw.padStart(2, "0");
+          const y = lm.thn || kel.thn_lahir;
+          dateStr = `${d}-${m}-${y}`;
+        }
+      } else if (jenis.includes("mati") || jenis.includes("kematian")) {
+        nameStr = kem.nama_lengkap || subjek.nama || "ALMARHUM";
+        dateStr = parseDate(kem.tanggal_kematian);
+        if (!dateStr && (kem.tgl_kematian || kem.bln_kematian)) {
+          const d = String(kem.tgl_kematian || "01").padStart(2, "0");
+          const mRaw = String(kem.bln_kematian || "01").toLowerCase();
+          const m = bulanMap[mRaw] || mRaw.padStart(2, "0");
+          const y = kem.thn_kematian || new Date().getFullYear();
+          dateStr = `${d}-${m}-${y}`;
+        }
+      } else {
+        nameStr = kel.nama_bayi || subjek.nama || "BAYI";
+        dateStr = parseDate(kel.tanggal_lengkap);
+        if (!dateStr && (kel.tgl_lahir || kel.bln_lahir)) {
+          const d = String(kel.tgl_lahir || "01").padStart(2, "0");
+          const mRaw = String(kel.bln_lahir || "01").toLowerCase();
+          const m = bulanMap[mRaw] || mRaw.padStart(2, "0");
+          const y = kel.thn_lahir || new Date().getFullYear();
+          dateStr = `${d}-${m}-${y}`;
+        }
+      }
+
+      if (!dateStr) {
+        dateStr = parseDate(data.tanggal_lapor_tgl) || parseDate(data.tanggal_lapor_tempat);
+      }
+      if (!dateStr) {
+        const now = new Date();
+        const d = String(now.getDate()).padStart(2, "0");
+        const m = String(now.getMonth() + 1).padStart(2, "0");
+        const y = now.getFullYear();
+        dateStr = `${d}-${m}-${y}`;
+      }
+
+      let cleanName = String(nameStr).replace(/[/\\:*?"<>|]+/g, "").replace(/\s+/g, " ").trim().toUpperCase();
+      if (!cleanName) cleanName = "SUBJEK";
+
+      return `${dateStr} - ${cleanName}.pdf`;
+    }
+
     // Display PDF in iframe
-    function displayPdfBlob(blob) {
+    function displayPdfBlob(blob, customFilename = null) {
       if (currentPdfBlobUrl) {
         URL.revokeObjectURL(currentPdfBlobUrl);
       }
@@ -1253,6 +1343,13 @@ AI & Smart Regex akan otomatis mendeteksi: NIK, Nama Bayi/Almarhum, No KK, Ayah,
       const iframe = document.getElementById("pdfIframe");
       const emptyState = document.getElementById("emptyPdfState");
       const actionButtons = document.getElementById("pdfActionButtons");
+      const badge = document.getElementById("pdfFilenameBadge");
+
+      const filename = customFilename || getPdfDownloadFilename(currentExtractedData);
+      if (badge) {
+        badge.innerText = filename;
+        badge.title = filename;
+      }
 
       iframe.src = currentPdfBlobUrl;
       iframe.classList.remove("hidden");
@@ -1264,8 +1361,8 @@ AI & Smart Regex akan otomatis mendeteksi: NIK, Nama Bayi/Almarhum, No KK, Ayah,
       if (!currentPdfBlobUrl) return;
       const a = document.createElement("a");
       a.href = currentPdfBlobUrl;
-      const jenis = currentExtractedData?.jenis_pelaporan || "Kelahiran";
-      a.download = `Formulir_F201A_${jenis}.pdf`;
+      const filename = getPdfDownloadFilename(currentExtractedData);
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

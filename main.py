@@ -12,8 +12,14 @@ import pdf_engine
 
 app = FastAPI(title="Generator Formulir F-2.01 A", description="Ekstraksi AI & PDF Generator F-2.01 A Dukcapil")
 
+TEMPLATE_V2 = os.path.join(os.path.dirname(__file__), "Formulir F-2.01 A (Kelahiran, Lahir Mati, Kematian) (2).pdf")
 USER_TEMPLATE = os.path.join(os.path.dirname(__file__), "Formulir F-2.01 A (Kelahiran, Lahir Mati, Kematian) (1).pdf")
-TEMPLATE_PDF = USER_TEMPLATE if os.path.exists(USER_TEMPLATE) else os.path.join(os.path.dirname(__file__), "F-2.01 A.pdf")
+if os.path.exists(TEMPLATE_V2):
+    TEMPLATE_PDF = TEMPLATE_V2
+elif os.path.exists(USER_TEMPLATE):
+    TEMPLATE_PDF = USER_TEMPLATE
+else:
+    TEMPLATE_PDF = os.path.join(os.path.dirname(__file__), "F-2.01 A.pdf")
 
 # Request Schemas
 class ExtractRequest(BaseModel):
@@ -119,6 +125,7 @@ def do_extraction(req: ExtractRequest) -> Dict[str, Any]:
 
     if req.jenis_pelaporan:
         res["jenis_pelaporan"] = req.jenis_pelaporan
+    res["_suggested_filename"] = pdf_engine.build_pdf_filename(res)
     return res
 
 @app.get("/api/ollama/status")
@@ -151,12 +158,13 @@ def api_generate_pdf(req: GeneratePdfRequest):
     try:
         pdf_bytes = pdf_engine.fill_f201a_pdf(TEMPLATE_PDF, req.data, single_page=req.single_page)
         
-        filename = f"Formulir_F201A_{req.data.get('jenis_pelaporan', 'Dukcapil')}.pdf"
+        filename = pdf_engine.build_pdf_filename(req.data)
         return Response(
             content=pdf_bytes,
             media_type="application/pdf",
             headers={
                 "Content-Disposition": f'inline; filename="{filename}"',
+                "X-Suggested-Filename": filename,
                 "Cache-Control": "no-cache, no-store, must-revalidate",
                 "Pragma": "no-cache",
                 "Expires": "0"
@@ -191,13 +199,14 @@ def api_extract_and_generate(req: ExtractAndGenerateRequest):
     ))
     
     pdf_bytes = pdf_engine.fill_f201a_pdf(TEMPLATE_PDF, extracted_data, single_page=req.single_page)
-    filename = f"Formulir_F201A_{extracted_data.get('jenis_pelaporan', 'Kelahiran')}.pdf"
+    filename = pdf_engine.build_pdf_filename(extracted_data)
     
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
         headers={
             "Content-Disposition": f'attachment; filename="{filename}"',
+            "X-Suggested-Filename": filename,
             "X-Extracted-Data": json.dumps(extracted_data),
             "Cache-Control": "no-cache, no-store, must-revalidate"
         }
