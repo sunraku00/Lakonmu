@@ -2,7 +2,8 @@
 # Dockerfile: Formulir Dukcapil F-2.01 A Generator
 # Stateless, Zero-Storage & AI-Assisted
 # ==========================================
-FROM python:3.11-slim
+# Menggunakan mirror resmi AWS ECR Public (bebas timeout/blokir ISP di Indonesia)
+FROM public.ecr.aws/docker/library/python:3.11-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
