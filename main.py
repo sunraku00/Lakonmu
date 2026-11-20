@@ -3,7 +3,7 @@ import io
 import json
 from typing import Optional, Dict, Any
 from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -11,6 +11,17 @@ import extractor
 import pdf_engine
 
 app = FastAPI(title="Generator Formulir F-2.01 A", description="Ekstraksi AI & PDF Generator F-2.01 A Dukcapil")
+
+STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    icon_path = os.path.join(STATIC_DIR, "logo-madiun.png")
+    if os.path.exists(icon_path):
+        return FileResponse(icon_path, media_type="image/png")
+    raise HTTPException(status_code=404)
 
 TEMPLATE_V2 = os.path.join(os.path.dirname(__file__), "Formulir F-2.01 A (Kelahiran, Lahir Mati, Kematian) (2).pdf")
 USER_TEMPLATE = os.path.join(os.path.dirname(__file__), "Formulir F-2.01 A (Kelahiran, Lahir Mati, Kematian) (1).pdf")
