@@ -92,7 +92,7 @@ def build_pdf_filename(data: Dict[str, Any]) -> str:
 
     return f"{date_str} - {clean_name}.pdf"
 
-def mark_choice(page, x0: float, y0: float, color=(0.05, 0.15, 0.5)):
+def mark_choice(page, x0: float, y0: float, color=(0, 0, 0)):
     """
     Menggambar tanda centang (checkmark) presisi di atas angka pilihan (misal '1.', '2.', dll.)
     pada template formulir baru tanpa menabrak kata di sebelahnya.
@@ -102,10 +102,10 @@ def mark_choice(page, x0: float, y0: float, color=(0.05, 0.15, 0.5)):
     page.draw_line(pymupdf.Point(x0 - 0.5, y1 - 4.5), pymupdf.Point(x0 + 2.5, y1 - 1.5), color=color, width=1.4)
     page.draw_line(pymupdf.Point(x0 + 2.5, y1 - 1.5), pymupdf.Point(x0 + 7.0, y1 - 8.5), color=color, width=1.4)
 
-def write_text(page, x: float, y: float, val: Any, max_len: int = 40, upper: bool = False, color=(0.05, 0.15, 0.5)):
+def write_text(page, x: float, y: float, val: Any, max_len: int = 40, upper: bool = False, color=(0, 0, 0), fontname="tiro"):
     """
     Memasukkan teks dengan auto-scaling ukuran font agar teks panjang tidak keluar batas atau menabrak garis.
-    y adalah baseline teks.
+    y adalah baseline teks. Menggunakan font Times New Roman (tiro) dan warna hitam.
     """
     if val is None or str(val).strip() == "":
         return
@@ -119,9 +119,9 @@ def write_text(page, x: float, y: float, val: Any, max_len: int = 40, upper: boo
     elif len(text) > 36:
         font_size = 7.5
     
-    page.insert_text((x, y), text, fontsize=font_size, fontname="helv", color=color)
+    page.insert_text((x, y), text, fontsize=font_size, fontname=fontname, color=color)
 
-def write_footer(page, y_date: float, y_pelapor: float, data: Dict[str, Any], wilayah: Dict[str, Any], pelapor: Dict[str, Any], ayah: Dict[str, Any] = None, ibu: Dict[str, Any] = None, text_color=(0.05, 0.15, 0.5)):
+def write_footer(page, y_date: float, y_pelapor: float, data: Dict[str, Any], wilayah: Dict[str, Any], pelapor: Dict[str, Any], ayah: Dict[str, Any] = None, ibu: Dict[str, Any] = None, text_color=(0, 0, 0), fontname="tiro"):
     """
     Menuliskan Tempat, Tanggal dan Nama Pelapor di bagian tanda tangan bawah.
     Pada template baru, koma (',') sudah tercetak di x = 421.9, sehingga:
@@ -129,7 +129,7 @@ def write_footer(page, y_date: float, y_pelapor: float, data: Dict[str, Any], wi
     - Tanggal ditulis di sebelah kanan koma (mulai x=428.0)
     - Nama Pelapor diletakkan di tengah tanda kurung (x = 358.3 s/d 491.8)
     """
-    font = pymupdf.Font("helv")
+    font = pymupdf.Font(fontname)
     
     tempat = ""
     tgl = ""
@@ -154,15 +154,15 @@ def write_footer(page, y_date: float, y_pelapor: float, data: Dict[str, Any], wi
     if tempat:
         w_tempat = font.text_length(tempat, fontsize=8.0)
         x_tempat = 418.0 - w_tempat
-        page.insert_text((x_tempat, y_date), tempat, fontsize=8.0, fontname="helv", color=text_color)
+        page.insert_text((x_tempat, y_date), tempat, fontsize=8.0, fontname=fontname, color=text_color)
     
     if tgl:
-        page.insert_text((428.0, y_date), tgl, fontsize=8.0, fontname="helv", color=text_color)
+        page.insert_text((428.0, y_date), tgl, fontsize=8.0, fontname=fontname, color=text_color)
 
     nama_pelapor = pelapor.get("nama") or (ayah.get("nama") if ayah else None) or (ibu.get("nama") if ibu else None) or "........................"
     w_pel = font.text_length(nama_pelapor.upper(), fontsize=8.5)
     x_pel = max(358.0, 425.0 - (w_pel / 2.0))
-    write_text(page, x_pel, y_pelapor, nama_pelapor, upper=True, color=text_color)
+    write_text(page, x_pel, y_pelapor, nama_pelapor, upper=True, color=text_color, fontname=fontname)
 
 def fill_f201a_pdf(template_path: str, data: Dict[str, Any], single_page: bool = True) -> bytes:
     """
@@ -184,7 +184,7 @@ def fill_f201a_pdf(template_path: str, data: Dict[str, Any], single_page: bool =
         target_page_idx = 0
 
     page = doc[target_page_idx]
-    text_color = (0.05, 0.15, 0.5) # Dark navy blue
+    text_color = (0, 0, 0) # Black
 
     wilayah = data.get("wilayah", {})
     pelapor = data.get("pelapor", {})
@@ -310,7 +310,7 @@ def fill_f201a_pdf(template_path: str, data: Dict[str, Any], single_page: bool =
             mark_choice(page, 194.2, 601.8, color=text_color)
         
         if faskes:
-            page.insert_text((435.0, 609.0), str(faskes)[:30], fontsize=7.2, fontname="helv", color=text_color)
+            page.insert_text((435.0, 609.0), str(faskes)[:30], fontsize=7.2, fontname="tiro", color=text_color)
 
         # 4. Tempat Kelahiran (Kabupaten/Kota)
         tmpt_lahir = kelahiran.get("tempat_kelahiran") or wilayah.get("kabupaten_kota", "")
@@ -319,20 +319,20 @@ def fill_f201a_pdf(template_path: str, data: Dict[str, Any], single_page: bool =
         # 5. Hari dan Tanggal Lahir
         hari = kelahiran.get("hari_lahir", "")
         if hari:
-            page.insert_text((218.0, 634.5), str(hari).capitalize() + ",", fontsize=8.5, fontname="helv", color=text_color)
+            page.insert_text((218.0, 634.5), str(hari).capitalize() + ",", fontsize=8.5, fontname="tiro", color=text_color)
 
         tgl_lahir_str = kelahiran.get("tanggal_lengkap")
         if not tgl_lahir_str and (kelahiran.get("tgl_lahir") or kelahiran.get("bln_lahir")):
             tgl_lahir_str = f"{kelahiran.get('tgl_lahir', '')} {kelahiran.get('bln_lahir', '')} {kelahiran.get('thn_lahir', '')}".strip()
         if tgl_lahir_str:
-            page.insert_text((298.0, 634.5), str(tgl_lahir_str), fontsize=8.5, fontname="helv", color=text_color)
+            page.insert_text((298.0, 634.5), str(tgl_lahir_str), fontsize=8.5, fontname="tiro", color=text_color)
 
         # 6. Pukul (Jam : Menit)
         jam = kelahiran.get("pukul_jam", "")
         menit = kelahiran.get("pukul_menit", "")
         if jam or menit:
-            page.insert_text((198.0, 647.2), str(jam or "00"), fontsize=8.5, fontname="helv", color=text_color)
-            page.insert_text((228.0, 647.2), f"{menit or '00'} WIB", fontsize=8.5, fontname="helv", color=text_color)
+            page.insert_text((198.0, 647.2), str(jam or "00"), fontsize=8.5, fontname="tiro", color=text_color)
+            page.insert_text((228.0, 647.2), f"{menit or '00'} WIB", fontsize=8.5, fontname="tiro", color=text_color)
 
         # 7. Jenis Kelahiran: 1. Tunggal (194.2), 2. Kembar 2 (240.9), 3. Kembar 3 (294.0), 4. Kembar 4 (347.2), 5. Lainnya (400.4)
         jk_lahir = str(kelahiran.get("jenis_kelahiran", "")).lower()
@@ -478,8 +478,8 @@ def fill_f201a_pdf(template_path: str, data: Dict[str, Any], single_page: bool =
         jam_m = kematian.get("pukul_jam", "")
         menit_m = kematian.get("pukul_menit", "")
         if jam_m or menit_m:
-            page.insert_text((198.0, 622.5), str(jam_m or "00"), fontsize=8.5, fontname="helv", color=text_color)
-            page.insert_text((228.0, 622.5), f"{menit_m or '00'} WIB", fontsize=8.5, fontname="helv", color=text_color)
+            page.insert_text((198.0, 622.5), str(jam_m or "00"), fontsize=8.5, fontname="tiro", color=text_color)
+            page.insert_text((228.0, 622.5), f"{menit_m or '00'} WIB", fontsize=8.5, fontname="tiro", color=text_color)
 
         # 5. Sebab Kematian: 1. Sakit biasa / tua (194.2), 2. Wabah Penyakit (270.1), 3. Kecelakaan (347.1), 4. Kriminalitas (406.9), 5. Bunuh Diri (469.9), 6. Lainnya (194.2, 640.0)
         sebab = str(kematian.get("sebab_kematian", "")).lower()
