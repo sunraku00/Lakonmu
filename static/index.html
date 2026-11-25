@@ -8,523 +8,795 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            dukcapil: {
-              50: '#f0f5fa',
-              100: '#e1ecf5',
-              500: '#0284c7',
-              600: '#0369a1',
-              700: '#075985',
-              800: '#0c4a6e',
-              900: '#0a3654',
-              950: '#052338',
+            obsidian: {
+              DEFAULT: '#1E1E20',
+              hover: '#2A2A2D',
+            },
+            ash: {
+              50: '#F4F5F7',
+              100: '#E5E6E9',
+              200: '#D2D4D9',
+              400: '#9A9AA0',
+              600: '#6B6B70',
+              900: '#1E1E20',
             }
+          },
+          borderRadius: {
+            shell: '32px',
+            bento: '24px',
+            subcard: '16px',
           }
         }
       }
     }
   </script>
-  <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-  </style>
+  <link rel="stylesheet" href="/static/tokens.css">
+  <script src="/static/ui-primitives.js" defer></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+<body class="bento-canvas antialiased p-2.5 sm:p-4 lg:p-6 flex items-start justify-center">
 
-  <!-- NAVBAR / HEADER -->
-  <header class="bg-dukcapil-950 text-white border-b border-dukcapil-800 shadow-md sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 rounded-xl bg-white/10 p-1 flex items-center justify-center shadow-md backdrop-blur-xs border border-white/20">
-          <img src="/static/logo-madiun.png" alt="Logo Kabupaten Madiun" class="h-10 w-auto object-contain drop-shadow">
-        </div>
-        <div>
-          <div class="flex items-center space-x-2">
-            <h1 class="text-lg font-bold tracking-tight">Formulir F-2.01 A Generator</h1>
-            <span class="bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs px-2 py-0.5 rounded-full font-semibold">Kab. Madiun</span>
-            <span class="bg-sky-500/20 border border-sky-400/30 text-sky-300 text-xs px-2 py-0.5 rounded-full font-medium">Permendagri</span>
+  <!-- MOBILE DRAWER BACKDROP -->
+  <div
+    id="mobileSidebarBackdrop"
+    onclick="window.UIPrimitives?.AppShell.closeDrawer()"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden opacity-0 transition-opacity duration-200"
+  ></div>
+
+  <!-- APP FROSTED GLASS SHELL -->
+  <div id="appShell" class="app-glass-shell w-full max-w-[1480px] p-3 sm:p-4 lg:p-5 flex flex-col lg:flex-row gap-4 lg:gap-5 relative">
+
+    <!-- FLOATING WHITE SIDEBAR (Sticky on desktop, collapsible drawer on mobile/tablet) -->
+    <aside
+      id="appSidebar"
+      class="floating-sidebar fixed lg:sticky inset-y-3 left-3 lg:top-6 z-50 w-[232px] shrink-0 p-4 flex flex-col justify-between -translate-x-[120%] lg:translate-x-0 transition-transform duration-300 ease-out overflow-y-auto max-h-[calc(100vh-1.5rem)] lg:h-[calc(100vh-5.5rem)] lg:max-h-[880px]"
+    >
+      <div class="space-y-6">
+        <!-- Brand Header (Logo Kab. Madiun in original color) -->
+        <div class="flex items-center justify-between gap-2 pb-4 border-b border-black/[0.06]">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-2xl bg-[#F4F5F7] border border-black/[0.06] p-1 flex items-center justify-center shrink-0">
+              <img src="/static/logo-madiun.png" alt="Logo Kabupaten Madiun" class="h-8 w-auto object-contain">
+            </div>
+            <div class="min-w-0">
+              <div class="text-sm font-bold tracking-tight text-[#1E1E20] truncate">F-2.01 A</div>
+              <div class="text-[11px] text-[#6B6B70] leading-tight truncate">Disdukcapil Madiun</div>
+            </div>
           </div>
-          <p class="text-xs text-slate-300 hidden sm:block">Dinas Kependudukan dan Pencatatan Sipil Kabupaten Madiun</p>
+          <button
+            type="button"
+            onclick="window.UIPrimitives?.AppShell.closeDrawer()"
+            class="lg:hidden w-8 h-8 rounded-full hover:bg-[#F4F5F7] flex items-center justify-center text-[#6B6B70]"
+            aria-label="Tutup menu"
+          >
+            <svg-icon name="x" size="16"></svg-icon>
+          </button>
+        </div>
+
+        <!-- GROUP 1: PELAPORAN F-2.01 A -->
+        <div class="space-y-1.5">
+          <div class="px-3 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+            Pelaporan F-2.01 A
+          </div>
+          <nav class="space-y-1">
+            <button
+              type="button"
+              id="navEventKelahiran"
+              onclick="selectEventType('Kelahiran'); window.UIPrimitives?.AppShell.closeDrawer();"
+              class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all bg-[#1E1E20] text-white"
+            >
+              <span class="flex items-center gap-2.5">
+                <svg-icon name="baby" size="15"></svg-icon>
+                <span>Kelahiran</span>
+              </span>
+              <span class="text-[10px] opacity-70 font-mono">Hal 1</span>
+            </button>
+            <button
+              type="button"
+              id="navEventLahirMati"
+              onclick="selectEventType('Lahir Mati'); window.UIPrimitives?.AppShell.closeDrawer();"
+              class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]"
+            >
+              <span class="flex items-center gap-2.5">
+                <svg-icon name="heartOff" size="15"></svg-icon>
+                <span>Lahir Mati</span>
+              </span>
+              <span class="text-[10px] opacity-70 font-mono">Hal 2</span>
+            </button>
+            <button
+              type="button"
+              id="navEventKematian"
+              onclick="selectEventType('Kematian'); window.UIPrimitives?.AppShell.closeDrawer();"
+              class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]"
+            >
+              <span class="flex items-center gap-2.5">
+                <svg-icon name="activity" size="15"></svg-icon>
+                <span>Kematian</span>
+              </span>
+              <span class="text-[10px] opacity-70 font-mono">Hal 3</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- GROUP 2: MODE & TAMPILAN -->
+        <div class="space-y-1.5">
+          <div class="px-3 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+            Mode &amp; Tampilan
+          </div>
+          <nav class="space-y-1">
+            <button
+              type="button"
+              id="navMode5Box"
+              onclick="switchInputMode('5box'); window.UIPrimitives?.AppShell.closeDrawer();"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all bg-[#F4F5F7] text-[#1E1E20]"
+            >
+              <svg-icon name="layoutGrid" size="15"></svg-icon>
+              <span>Input 5 Text Box</span>
+            </button>
+            <button
+              type="button"
+              id="navMode1Box"
+              onclick="switchInputMode('1box'); window.UIPrimitives?.AppShell.closeDrawer();"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]"
+            >
+              <svg-icon name="fileText" size="15"></svg-icon>
+              <span>Input 1 Global</span>
+            </button>
+            <button
+              type="button"
+              id="navTabPdf"
+              onclick="switchTab('pdf'); window.UIPrimitives?.AppShell.closeDrawer();"
+              class="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all bg-[#F4F5F7] text-[#1E1E20]"
+            >
+              <svg-icon name="filePlus" size="15"></svg-icon>
+              <span>Pratinjau PDF</span>
+            </button>
+            <button
+              type="button"
+              id="navTabData"
+              onclick="switchTab('data'); window.UIPrimitives?.AppShell.closeDrawer();"
+              class="w-full flex items-center justify-between px-3.5 py-2 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]"
+            >
+              <span class="flex items-center gap-2.5">
+                <svg-icon name="edit" size="15"></svg-icon>
+                <span>Editor Data</span>
+              </span>
+              <span id="navDetectedBadge" class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded-full bg-[#E5E6E9] text-[#1E1E20]">0</span>
+            </button>
+          </nav>
         </div>
       </div>
-      <div class="flex items-center space-x-3">
-        <div class="hidden md:flex items-center space-x-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs px-3 py-1.5 rounded-lg">
-          <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-          </svg>
-          <span class="font-medium">Stateless (Zero Storage)</span>
+
+      <!-- PINNED BOTTOM UTILITIES -->
+      <div class="pt-4 mt-6 border-t border-black/[0.06] space-y-1">
+        <div class="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+          Utilitas
         </div>
-        <button onclick="toggleAiGuideModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5">
-          <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-          </svg>
-          <span>Saran AI & Panduan</span>
+        <button
+          type="button"
+          onclick="focusAiConfig(); window.UIPrimitives?.AppShell.closeDrawer();"
+          class="w-full flex items-center justify-between px-3.5 py-2 rounded-full text-xs font-medium text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20] transition-all"
+        >
+          <span class="flex items-center gap-2.5">
+            <svg-icon name="sliders" size="15"></svg-icon>
+            <span>Konfigurasi AI</span>
+          </span>
+          <span id="sidebarEngineDot" class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span>
+        </button>
+        <button
+          type="button"
+          onclick="toggleAiGuideModal(); window.UIPrimitives?.AppShell.closeDrawer();"
+          class="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20] transition-all"
+        >
+          <svg-icon name="shieldCheck" size="15"></svg-icon>
+          <span>Panduan &amp; UU PDP</span>
+        </button>
+        <button
+          type="button"
+          onclick="clearInput(); window.UIPrimitives?.AppShell.closeDrawer();"
+          class="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20] transition-all"
+        >
+          <svg-icon name="trash" size="15"></svg-icon>
+          <span>Reset Semua Input</span>
         </button>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <!-- ZERO STORAGE BANNER -->
-  <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-200/60 py-2 px-4 text-xs text-emerald-800 text-center flex items-center justify-center space-x-2">
-    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-    </svg>
-    <span><strong>Jaminan Privasi Penuh:</strong> Tidak ada data atau teks yang disimpan ke database maupun harddisk server. Seluruh proses parsing dan pembuatan PDF dilakukan 100% <em>in-memory</em> (RAM) lalu langsung dikirim ke browser Anda.</span>
-  </div>
+    <!-- MAIN CONTENT WORKSPACE -->
+    <div class="flex-1 min-w-0 flex flex-col gap-4">
 
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- TOP HEADER BAR -->
+      <header class="flex flex-wrap items-center justify-between gap-3 px-1 pt-0.5">
+        <div class="flex items-center gap-3 min-w-0">
+          <!-- Mobile Menu Button -->
+          <button
+            type="button"
+            onclick="window.UIPrimitives?.AppShell.toggleDrawer()"
+            class="btn-circle-white lg:hidden shrink-0"
+            aria-label="Buka navigasi"
+          >
+            <svg-icon name="menu" size="18"></svg-icon>
+          </button>
 
-      <!-- LEFT COLUMN: INPUT TEXTAREA & CONTROLS (5 cols on lg) -->
-      <section class="lg:col-span-5 flex flex-col space-y-4">
-        
-        <!-- CARD INPUT -->
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col space-y-4">
-          
-          <!-- 3-WAY EVENT SELECTOR: KELAHIRAN | LAHIR MATI | KEMATIAN -->
-          <div class="space-y-1.5 pb-2 border-b border-slate-100">
-            <div class="flex items-center justify-between">
-              <label class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center space-x-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-dukcapil-500 animate-pulse"></span>
-                <span>Pilih Jenis Pelaporan F-2.01 A:</span>
-              </label>
-              <span id="activeEventBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300">
-                👶 Kelahiran (Hal 1)
+          <div class="min-w-0">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h1 id="pageMainTitle" class="text-2xl sm:text-[26px] font-bold tracking-tight text-[#1E1E20] leading-none">
+                Pelaporan Kelahiran
+              </h1>
+              <span class="text-[11px] font-medium px-2.5 py-1 rounded-full bg-white/85 border border-black/[0.06] text-[#6B6B70] leading-none">
+                F-2.01 A · Stateless
               </span>
             </div>
+            <p class="text-xs text-[#6B6B70] mt-1 truncate">
+              Dinas Kependudukan dan Pencatatan Sipil Kabupaten Madiun · Pemrosesan 100% In-Memory
+            </p>
+          </div>
+        </div>
 
-            <div class="grid grid-cols-3 gap-2 pt-1">
-              <!-- OPSI 1: KELAHIRAN -->
+        <!-- Right Header Controls: Dark CTA Pill + 40x40 Circular White Buttons + Emblem Logo -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            id="btnGeneratePdf"
+            onclick="handleGeneratePdfDirect()"
+            class="btn-dark-pill h-10 px-4 sm:px-5 text-xs font-semibold inline-flex items-center gap-2 cursor-pointer"
+          >
+            <svg-icon name="plus" size="15"></svg-icon>
+            <span>Generate PDF</span>
+          </button>
+
+          <button
+            type="button"
+            id="btnExtractReview"
+            onclick="handleExtractReview()"
+            title="Ekstrak &amp; Tinjau Data"
+            class="btn-circle-white"
+            aria-label="Ekstrak & Tinjau Data"
+          >
+            <svg-icon name="search" size="16"></svg-icon>
+          </button>
+
+          <button
+            type="button"
+            onclick="focusAiConfig()"
+            title="Konfigurasi Mesin AI"
+            class="btn-circle-white"
+            aria-label="Konfigurasi AI"
+          >
+            <svg-icon name="sliders" size="16"></svg-icon>
+          </button>
+
+          <button
+            type="button"
+            onclick="toggleAiGuideModal()"
+            title="Saran AI &amp; Panduan UU PDP"
+            class="btn-circle-white"
+            aria-label="Saran AI dan Panduan"
+          >
+            <svg-icon name="info" size="16"></svg-icon>
+          </button>
+
+          <!-- Emblem Kabupaten Madiun (Original Colors Preserved) -->
+          <div
+            title="Pemerintah Kabupaten Madiun"
+            class="w-10 h-10 rounded-full bg-white border border-black/[0.08] shadow-sm p-1.5 hidden sm:flex items-center justify-center shrink-0"
+          >
+            <img src="/static/logo-madiun.png" alt="Lambang Kabupaten Madiun" class="h-7 w-auto object-contain">
+          </div>
+        </div>
+      </header>
+
+      <!-- GLOBAL STATUS / VALIDATION ALERT BANNER -->
+      <div id="statusAlert" class="hidden px-4 py-2.5 rounded-2xl text-xs font-medium flex items-center justify-between gap-2 transition-all"></div>
+
+      <!-- ===============================================================
+           ROW 1: BALANCED 3-CARD OVERVIEW BENTO STRIP
+           =============================================================== -->
+      <section class="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
+
+        <!-- 1. KPI HERO CARD (DARK #1E1E20 + 3 SUB-CARDS #E5E6E9) -->
+        <bento-card variant="dark" lift class="md:col-span-12 lg:col-span-5 p-4 sm:p-5 flex flex-col justify-between gap-3.5">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-semibold uppercase tracking-widest text-white/55">
+                Ringkasan Ekstraksi
+              </span>
+              <div class="flex items-baseline gap-2.5 mt-1">
+                <span id="heroDetectedNumber" class="text-4xl font-bold tracking-tight text-white tabular-nums leading-none">0</span>
+                <span class="text-xs text-white/70 font-medium">elemen data terdeteksi</span>
+              </div>
+            </div>
+            <span id="activeEventBadge" class="text-[11px] font-semibold px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white shrink-0">
+              Kelahiran (Hal 1)
+            </span>
+          </div>
+
+          <!-- 3 Bright Mini-Stat Cards (#E5E6E9) inside Dark Card -->
+          <div class="grid grid-cols-3 gap-2.5">
+            <div class="mini-stat-tile px-3 py-2.5 flex flex-col justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-wider text-[#6B6B70]">Template</span>
+              <div id="heroPageInfo" class="text-xs font-bold text-[#1E1E20] mt-0.5 truncate">Halaman 1</div>
+            </div>
+            <div class="mini-stat-tile px-3 py-2.5 flex flex-col justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-wider text-[#6B6B70]">Mesin AI</span>
+              <div id="heroEngineInfo" class="text-xs font-bold text-[#1E1E20] mt-0.5 truncate">Ollama</div>
+            </div>
+            <div class="mini-stat-tile px-3 py-2.5 flex flex-col justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-wider text-[#6B6B70]">Storage</span>
+              <div class="text-xs font-bold text-[#1E1E20] mt-0.5 truncate">0 KB · RAM</div>
+            </div>
+          </div>
+        </bento-card>
+
+        <!-- 2. PROGRESS & SAMPLE PRESETS CARD (MUTED GREY + CIRCULAR PROGRESS + DARK CONTEXT MENU) -->
+        <bento-card variant="muted" lift class="md:col-span-7 lg:col-span-4 p-4 sm:p-5 flex flex-col justify-between gap-3 relative">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3 min-w-0">
+              <circular-progress id="inputProgressRing" value="0" max="5" size="34" tone="light"></circular-progress>
+              <div class="min-w-0">
+                <h2 class="text-xs font-bold text-[#1E1E20] uppercase tracking-wider">Kesiapan Input</h2>
+                <p id="inputProgressSubtitle" class="text-[11px] text-[#6B6B70] truncate">0 dari 5 bagian teks terisi</p>
+              </div>
+            </div>
+
+            <!-- Dark Context Menu Trigger -->
+            <div class="relative shrink-0">
+              <button
+                type="button"
+                data-dark-menu-trigger
+                onclick="window.UIPrimitives?.DarkContextMenu.toggle('sampleContextMenu', event)"
+                class="w-8 h-8 rounded-full bg-white/85 hover:bg-white border border-black/[0.06] flex items-center justify-center text-[#1E1E20] transition-colors"
+                title="Menu cepat data contoh &amp; reset"
+                aria-label="Menu cepat"
+              >
+                <svg-icon name="moreHorizontal" size="16"></svg-icon>
+              </button>
+
+              <!-- Floating Dark Context Menu Popover (#1E1E20) -->
+              <div
+                id="sampleContextMenu"
+                data-dark-menu
+                class="hidden dark-context-menu absolute right-0 top-10 w-52 p-1.5 z-30 text-xs"
+              >
+                <div class="px-2.5 py-1.5 text-[10px] uppercase tracking-widest text-white/45 font-semibold">Contoh Data Copas</div>
+                <button type="button" onclick="loadSample('rsia_bunda'); window.UIPrimitives?.DarkContextMenu.closeAll();" class="w-full text-left px-2.5 py-2 rounded-xl flex items-center gap-2 transition-colors">
+                  <svg-icon name="baby" size="14"></svg-icon>
+                  <span>RSIA Bunda (Kelahiran)</span>
+                </button>
+                <button type="button" onclick="loadSample('lahir_mati'); window.UIPrimitives?.DarkContextMenu.closeAll();" class="w-full text-left px-2.5 py-2 rounded-xl flex items-center gap-2 transition-colors">
+                  <svg-icon name="heartOff" size="14"></svg-icon>
+                  <span>RSUD Tarakan (Lahir Mati)</span>
+                </button>
+                <button type="button" onclick="loadSample('kematian'); window.UIPrimitives?.DarkContextMenu.closeAll();" class="w-full text-left px-2.5 py-2 rounded-xl flex items-center gap-2 transition-colors">
+                  <svg-icon name="activity" size="14"></svg-icon>
+                  <span>RSUD PM (Kematian)</span>
+                </button>
+                <div class="my-1 border-t border-white/10"></div>
+                <button type="button" onclick="clearInput(); window.UIPrimitives?.DarkContextMenu.closeAll();" class="w-full text-left px-2.5 py-2 rounded-xl flex items-center gap-2 text-white/80 transition-colors">
+                  <svg-icon name="trash" size="14"></svg-icon>
+                  <span>Bersihkan Semua Box</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5-Box Live Status Pills -->
+          <div class="flex flex-wrap gap-1.5">
+            <span id="statusChipPeristiwa" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/80 text-[#6B6B70] border border-black/[0.06] inline-flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span> Peristiwa
+            </span>
+            <span id="statusChipPelapor" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/80 text-[#6B6B70] border border-black/[0.06] inline-flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span> Pelapor
+            </span>
+            <span id="statusChipOrtu" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/80 text-[#6B6B70] border border-black/[0.06] inline-flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span> Orang Tua
+            </span>
+            <span id="statusChipSaksi1" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/80 text-[#6B6B70] border border-black/[0.06] inline-flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span> Saksi I
+            </span>
+            <span id="statusChipSaksi2" class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/80 text-[#6B6B70] border border-black/[0.06] inline-flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span> Saksi II
+            </span>
+          </div>
+
+          <!-- Quick Sample Pills -->
+          <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-black/[0.06]">
+            <span class="text-[10px] font-semibold uppercase tracking-wider text-[#6B6B70] mr-0.5">Contoh:</span>
+            <button type="button" onclick="loadSample('rsia_bunda')" class="text-[11px] font-medium bg-white/90 hover:bg-[#1E1E20] hover:text-white text-[#1E1E20] border border-black/[0.06] px-2.5 py-1 rounded-full transition-colors">
+              RSIA Bunda
+            </button>
+            <button type="button" onclick="loadSample('lahir_mati')" class="text-[11px] font-medium bg-white/90 hover:bg-[#1E1E20] hover:text-white text-[#1E1E20] border border-black/[0.06] px-2.5 py-1 rounded-full transition-colors">
+              Tarakan
+            </button>
+            <button type="button" onclick="loadSample('kematian')" class="text-[11px] font-medium bg-white/90 hover:bg-[#1E1E20] hover:text-white text-[#1E1E20] border border-black/[0.06] px-2.5 py-1 rounded-full transition-colors">
+              RSUD PM
+            </button>
+          </div>
+        </bento-card>
+
+        <!-- 3. QUICK ACTION / DASHED MODE CARD -->
+        <bento-card variant="dashed" tilt class="md:col-span-5 lg:col-span-3 p-4 sm:p-5 flex flex-col justify-between gap-3">
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+              <span class="text-[10px] font-semibold uppercase tracking-widest text-[#6B6B70]">Format Input</span>
+              <div id="activeModeLabel" class="text-sm font-bold text-[#1E1E20] mt-0.5 truncate">5 Text Box Terpisah</div>
+            </div>
+            <span class="w-8 h-8 rounded-full bg-white/85 border border-black/[0.08] flex items-center justify-center text-[#1E1E20] shrink-0">
+              <svg-icon name="layers" size="15"></svg-icon>
+            </span>
+          </div>
+
+          <div class="inline-flex p-1 rounded-full bg-white/75 border border-black/[0.08] text-xs font-semibold w-full">
+            <button
+              type="button"
+              id="btnTab5Box"
+              onclick="switchInputMode('5box')"
+              class="flex-1 py-1.5 px-2.5 rounded-full bg-[#1E1E20] text-white transition-all text-center text-[11px]"
+            >
+              5 Text Box
+            </button>
+            <button
+              type="button"
+              id="btnTab1Box"
+              onclick="switchInputMode('1box')"
+              class="flex-1 py-1.5 px-2.5 rounded-full text-[#6B6B70] hover:text-[#1E1E20] transition-all text-center text-[11px]"
+            >
+              1 Global
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between gap-2">
+            <button
+              type="button"
+              onclick="handleExtractReview()"
+              class="flex-1 py-1.5 px-3 rounded-full bg-white hover:bg-[#1E1E20] hover:text-white text-[#1E1E20] border border-black/[0.08] text-[11px] font-semibold transition-all inline-flex items-center justify-center gap-1.5"
+            >
+              <svg-icon name="search" size="13"></svg-icon>
+              <span>Tinjau</span>
+            </button>
+            <button
+              type="button"
+              onclick="clearInput()"
+              title="Bersihkan Semua Text Box"
+              class="py-1.5 px-3 rounded-full bg-white/75 hover:bg-[#E5E6E9] text-[#6B6B70] hover:text-[#1E1E20] border border-black/[0.08] text-[11px] font-medium transition-all inline-flex items-center gap-1"
+            >
+              <svg-icon name="trash" size="13"></svg-icon>
+              <span>Reset</span>
+            </button>
+          </div>
+        </bento-card>
+
+      </section>
+
+      <!-- ===============================================================
+           ROW 2: CORE WORKSPACE (INPUT DATA + PDF/EDITOR BENTO CARDS)
+           =============================================================== -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+
+        <!-- LEFT BENTO CARD: RAW INPUT WORKSPACE (5 cols) -->
+        <bento-card variant="light" class="lg:col-span-5 p-5 flex flex-col gap-3.5">
+
+          <!-- Compact Event Switcher & Progress Header -->
+          <div class="space-y-2.5 pb-3 border-b border-black/[0.06]">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-[#1E1E20] uppercase tracking-wider">Data Mentah F-2.01 A</span>
+              </div>
+              <circular-progress id="inputBoxRing" value="0" max="5" size="32" tone="light"></circular-progress>
+            </div>
+
+            <!-- Compact 1-Row Segmented Event Selector -->
+            <div class="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-[#F4F5F7] border border-black/[0.06]">
               <button
                 type="button"
                 id="btnEventKelahiran"
                 onclick="selectEventType('Kelahiran')"
-                class="py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-sky-50 border-sky-500 text-sky-900 shadow-xs cursor-pointer"
+                class="py-2 px-2 rounded-xl font-semibold text-[11px] flex items-center justify-center gap-1.5 transition-all bg-[#1E1E20] text-white shadow-sm cursor-pointer"
               >
-                <span class="text-lg">👶</span>
-                <span class="font-bold mt-0.5">Kelahiran</span>
-                <span class="text-[10px] text-sky-700/80 font-normal">Halaman 1</span>
+                <svg-icon name="baby" size="14"></svg-icon>
+                <span>Kelahiran</span>
               </button>
 
-              <!-- OPSI 2: LAHIR MATI -->
               <button
                 type="button"
                 id="btnEventLahirMati"
                 onclick="selectEventType('Lahir Mati')"
-                class="py-2 px-2 rounded-xl border border-slate-200 font-semibold text-xs flex flex-col items-center justify-center transition-all bg-white hover:bg-amber-50 hover:border-amber-300 text-slate-700 cursor-pointer shadow-2xs"
+                class="py-2 px-2 rounded-xl font-medium text-[11px] flex items-center justify-center gap-1.5 transition-all text-[#6B6B70] hover:text-[#1E1E20] hover:bg-white/70 cursor-pointer"
               >
-                <span class="text-lg">🚼</span>
-                <span class="font-bold mt-0.5">Lahir Mati</span>
-                <span class="text-[10px] text-slate-400 font-normal">Halaman 2</span>
+                <svg-icon name="heartOff" size="14"></svg-icon>
+                <span>Lahir Mati</span>
               </button>
 
-              <!-- OPSI 3: KEMATIAN -->
               <button
                 type="button"
                 id="btnEventKematian"
                 onclick="selectEventType('Kematian')"
-                class="py-2 px-2 rounded-xl border border-slate-200 font-semibold text-xs flex flex-col items-center justify-center transition-all bg-white hover:bg-rose-50 hover:border-rose-300 text-slate-700 cursor-pointer shadow-2xs"
+                class="py-2 px-2 rounded-xl font-medium text-[11px] flex items-center justify-center gap-1.5 transition-all text-[#6B6B70] hover:text-[#1E1E20] hover:bg-white/70 cursor-pointer"
               >
-                <span class="text-lg">🕊️</span>
-                <span class="font-bold mt-0.5">Kematian</span>
-                <span class="text-[10px] text-slate-400 font-normal">Halaman 3</span>
+                <svg-icon name="activity" size="14"></svg-icon>
+                <span>Kematian</span>
               </button>
             </div>
           </div>
 
-          <div class="flex items-center justify-between pb-1">
-            <span class="text-xs font-semibold text-slate-600">Mode Format Input:</span>
-            <!-- MODE SWITCHER: 5 TEXT BOX vs 1 GLOBAL -->
-            <div class="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold">
-              <button
-                type="button"
-                id="btnTab5Box"
-                onclick="switchInputMode('5box')"
-                class="px-2.5 py-1 rounded-md bg-white text-dukcapil-800 shadow-xs transition-all flex items-center space-x-1"
-              >
-                <span>📑 5 Text Box</span>
-              </button>
-              <button
-                type="button"
-                id="btnTab1Box"
-                onclick="switchInputMode('1box')"
-                class="px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all flex items-center space-x-1"
-              >
-                <span>📄 1 Global</span>
-              </button>
-            </div>
-          </div>
+          <!-- CONTAINER MODE 1: 5 DEDICATED TEXT BOXES -->
+          <div id="container5Box" class="space-y-2.5 flex-1">
 
-          <!-- SAMPLE PRESET PILLS -->
-          <div class="flex flex-wrap gap-1.5 items-center">
-            <span class="text-xs text-slate-400 mr-1 font-medium">Contoh Copas:</span>
-            <button type="button" onclick="loadSample('rsia_bunda')" class="text-xs bg-slate-100 hover:bg-sky-50 hover:text-sky-700 hover:border-sky-300 border border-slate-200 px-2 py-1 rounded-lg transition-all font-medium text-slate-600">
-              👶 RSIA Bunda (Lahir)
-            </button>
-            <button type="button" onclick="loadSample('lahir_mati')" class="text-xs bg-slate-100 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200 px-2 py-1 rounded-lg transition-all font-medium text-slate-600">
-              🚼 RSUD Tarakan (Lahir Mati)
-            </button>
-            <button type="button" onclick="loadSample('kematian')" class="text-xs bg-slate-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 border border-slate-200 px-2 py-1 rounded-lg transition-all font-medium text-slate-600">
-              🕊️ RSUD PM (Kematian)
-            </button>
-            <button type="button" onclick="clearInput()" title="Bersihkan Semua Text Box" class="text-xs bg-slate-100 hover:bg-red-50 hover:text-red-600 border border-slate-200 px-2 py-1 rounded-lg text-slate-500 flex items-center space-x-1 transition-all">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-              <span>Reset</span>
-            </button>
-          </div>
-
-          <!-- CONTAINER MODE 1: 5 DEDICATED TEXT BOXES (DEFAULT) -->
-          <div id="container5Box" class="space-y-3">
-            
-            <!-- 1. DATA KELAHIRAN / PERISTIWA -->
-            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
-              <div class="flex items-center justify-between mb-1">
-                <label id="peristiwaBoxTitle" class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-sky-500"></span>
-                  <span>1. Data Peristiwa: Kelahiran</span>
+            <!-- 01. DATA PERISTIWA -->
+            <div class="bento-subcard p-3">
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <label id="peristiwaBoxTitle" class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wide flex items-center gap-1.5">
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#1E1E20] text-white leading-none">01</span>
+                  <span>Data Peristiwa: Kelahiran</span>
                 </label>
-                <span id="peristiwaBoxSubtitle" class="text-[10px] text-slate-400">RS/Bidan, Nama Bayi, Tanggal/Jam Lahir, BB, PB</span>
+                <span id="peristiwaBoxSubtitle" class="text-[10px] text-[#6B6B70] truncate">RS/Bidan, Nama Bayi, Tgl/Jam, BB, PB</span>
               </div>
               <textarea
                 id="box_peristiwa"
                 rows="3"
-                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all resize-y outline-none focus:border-sky-400"
+                class="w-full text-xs font-mono mono-input p-2.5 leading-relaxed resize-y"
               ></textarea>
             </div>
 
-            <!-- 2. DATA PELAPOR -->
-            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  <span>2. Data Pelapor</span>
+            <!-- 02. DATA PELAPOR -->
+            <div class="bento-subcard p-3">
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <label class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wide flex items-center gap-1.5">
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">02</span>
+                  <span>Data Pelapor</span>
                 </label>
-                <span class="text-[10px] text-slate-400">Nama, NIK 16 digit, No. KK, Umur, Alamat</span>
+                <span class="text-[10px] text-[#6B6B70] truncate">Nama, NIK 16 digit, No. KK, Alamat</span>
               </div>
               <textarea
                 id="box_pelapor"
                 rows="2"
-                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all resize-y outline-none focus:border-emerald-400"
+                class="w-full text-xs font-mono mono-input p-2.5 leading-relaxed resize-y"
               ></textarea>
             </div>
 
-            <!-- 3. DATA ORANG TUA (AYAH & IBU) -->
-            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-                  <span>3. Data Orang Tua (Ayah & Ibu)</span>
+            <!-- 03. DATA ORANG TUA -->
+            <div class="bento-subcard p-3">
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <label class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wide flex items-center gap-1.5">
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">03</span>
+                  <span>Data Orang Tua</span>
                 </label>
-                <!-- SUB-TOGGLE: GABUNG AYAH/IBU VS PISAH DUA KOTAK -->
-                <div class="inline-flex p-0.5 rounded-md bg-slate-200/70 text-[10px] font-medium">
-                  <button type="button" id="btnOrtuCombined" onclick="toggleOrtuMode('combined')" class="px-1.5 py-0.5 rounded bg-white text-indigo-900 shadow-xs">👨‍👩‍👧 Gabung</button>
-                  <button type="button" id="btnOrtuSplit" onclick="toggleOrtuMode('split')" class="px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900">👨 Ayah | 👩 Ibu</button>
+                <div class="inline-flex p-0.5 rounded-full bg-[#E5E6E9] text-[10px] font-semibold">
+                  <button type="button" id="btnOrtuCombined" onclick="toggleOrtuMode('combined')" class="px-2.5 py-0.5 rounded-full bg-[#1E1E20] text-white transition-all">Gabung</button>
+                  <button type="button" id="btnOrtuSplit" onclick="toggleOrtuMode('split')" class="px-2.5 py-0.5 rounded-full text-[#6B6B70] hover:text-[#1E1E20] transition-all">Ayah | Ibu</button>
                 </div>
               </div>
 
-              <!-- VIEW A: SINGLE COMBINED ORANG TUA TEXTAREA -->
               <div id="ortuCombinedView">
                 <textarea
                   id="box_orangtua"
                   rows="3"
-                  class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all resize-y outline-none focus:border-indigo-400"
+                  class="w-full text-xs font-mono mono-input p-2.5 leading-relaxed resize-y"
                 ></textarea>
               </div>
 
-              <!-- VIEW B: SPLIT AYAH AND IBU TEXTAREAS -->
               <div id="ortuSplitView" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                  <span class="block text-[10px] font-bold text-slate-600 mb-0.5">👨 Identitas Ayah:</span>
+                  <span class="block text-[10px] font-semibold text-[#6B6B70] mb-1">Identitas Ayah:</span>
                   <textarea
                     id="box_ayah"
                     rows="2"
-                    class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all resize-y outline-none focus:border-indigo-400"
+                    class="w-full text-xs font-mono mono-input p-2.5 leading-relaxed resize-y"
                   ></textarea>
                 </div>
                 <div>
-                  <span class="block text-[10px] font-bold text-slate-600 mb-0.5">👩 Identitas Ibu:</span>
+                  <span class="block text-[10px] font-semibold text-[#6B6B70] mb-1">Identitas Ibu:</span>
                   <textarea
                     id="box_ibu"
                     rows="2"
-                    class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all resize-y outline-none focus:border-indigo-400"
+                    class="w-full text-xs font-mono mono-input p-2.5 leading-relaxed resize-y"
                   ></textarea>
                 </div>
               </div>
             </div>
 
-            <!-- 4. DATA SAKSI I -->
-            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                  <span>4. Data Saksi I</span>
-                </label>
-                <span class="text-[10px] text-slate-400">Nama Saksi 1, NIK 16 digit, Umur, Pekerjaan</span>
+            <!-- 04 & 05 SAKSI GRID ON WIDE OR STACKED CLEANLY -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5">
+              <!-- 04. DATA SAKSI I -->
+              <div class="bento-subcard p-3">
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                  <label class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wide flex items-center gap-1.5">
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">04</span>
+                    <span>Data Saksi I</span>
+                  </label>
+                  <span class="text-[10px] text-[#6B6B70] truncate">Nama, NIK, Umur, Pekerjaan</span>
+                </div>
+                <textarea
+                  id="box_saksi1"
+                  rows="2"
+                  class="w-full text-xs font-mono mono-input p-2.5 leading-relaxed resize-y"
+                ></textarea>
+              </div>
+
+              <!-- 05. DATA SAKSI II -->
+              <div class="bento-subcard p-3">
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                  <label class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wide flex items-center gap-1.5">
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">05</span>
+                    <span>Data Saksi II</span>
+                  </label>
+                  <span class="text-[10px] text-[#6B6B70] truncate">Nama, NIK, Umur, Pekerjaan</span>
+                </div>
+                <textarea
+                  id="box_saksi2"
+                  rows="2"
+                  class="w-full text-xs font-mono mono-input p-2.5 leading-relaxed resize-y"
+                ></textarea>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CONTAINER MODE 2: 1 GLOBAL UNIFIED TEXTAREA -->
+          <div id="container1Box" class="relative hidden flex-1 flex flex-col">
+            <div class="bento-subcard p-3 flex-1 flex flex-col">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wide">Teks Global (SIAK / SIMRS / WA)</span>
+                <span id="charCount" class="text-[10px] font-mono text-[#6B6B70]">0 karakter</span>
               </div>
               <textarea
-                id="box_saksi1"
-                rows="2"
-                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all resize-y outline-none focus:border-amber-400"
+                id="rawTextarea"
+                rows="16"
+                class="w-full flex-1 text-xs font-mono mono-input p-3 leading-relaxed resize-y"
               ></textarea>
             </div>
-
-            <!-- 5. DATA SAKSI II -->
-            <div class="bg-slate-50/80 border border-slate-200/90 rounded-xl p-2.5 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-200 transition-all">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-slate-700 uppercase tracking-wide flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                  <span>5. Data Saksi II</span>
-                </label>
-                <span class="text-[10px] text-slate-400">Nama Saksi 2, NIK 16 digit, Umur, Pekerjaan</span>
-              </div>
-              <textarea
-                id="box_saksi2"
-                rows="2"
-                class="w-full text-xs font-mono bg-white border border-slate-200 rounded-lg p-2 text-slate-700 leading-relaxed transition-all resize-y outline-none focus:border-amber-400"
-              ></textarea>
-            </div>
-
           </div>
 
-          <!-- CONTAINER MODE 2: 1 GLOBAL UNIFIED TEXTAREA (CLASSIC) -->
-          <div id="container1Box" class="relative hidden">
-            <textarea
-              id="rawTextarea"
-              rows="12"
-              class="w-full text-xs font-mono bg-slate-50 border border-slate-300 focus:border-dukcapil-500 focus:ring-2 focus:ring-dukcapil-100 rounded-xl p-3.5 text-slate-700 leading-relaxed transition-all resize-y outline-none"
-            ></textarea>
-            <div id="charCount" class="absolute bottom-2 right-3 text-[10px] text-slate-400 pointer-events-none">0 karakter</div>
-          </div>
-
-          <!-- COLLAPSIBLE AI CONFIG ACCORDION -->
-          <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
-            <button type="button" onclick="toggleConfigAccordion()" class="w-full px-3.5 py-2.5 flex items-center justify-between text-left text-xs font-semibold text-slate-700 hover:bg-slate-100/70 transition-colors">
-              <div class="flex items-center space-x-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Konfigurasi AI: <span id="currentEngineBadge" class="text-emerald-700 font-bold">Local Ollama (100% Offline & Privat)</span></span>
-              </div>
-              <svg id="accordionChevron" class="w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-            <div id="configContent" class="p-3.5 border-t border-slate-200 bg-white space-y-3 text-xs">
-              <div>
-                <label class="block font-semibold text-slate-700 mb-1">Pilih Mesin AI / Deteksi:</label>
-                <select id="aiEngineSelect" onchange="onEngineChange()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 focus:ring-1 focus:ring-sky-500 outline-none font-medium">
-                  <option value="ollama" selected>💻 Local AI via Ollama (100% Privat, Offline, Sesuai UU PDP)</option>
-                  <option value="regex">⚡ Smart Regex Bawaan (Offline, Tanpa API Key / LLM)</option>
-                  <option value="gemini">✨ Google Gemini 2.5 Flash (Sangat Cepat & Akurat via API)</option>
-                  <option value="openai">🧠 OpenAI GPT-4o-mini</option>
-                </select>
-                <p id="engineHint" class="mt-1 text-[11px] text-slate-500">Berjalan 100% lokal di komputer Anda. Data kependudukan tidak pernah keluar ke internet.</p>
-              </div>
-
-              <!-- OLLAMA HOST & MODEL (PRIMARY DEFAULT) -->
-              <div id="ollamaGroup" class="space-y-2.5 bg-emerald-50/50 border border-emerald-200/60 p-3 rounded-xl">
-                <div class="flex items-center justify-between">
-                  <span class="font-bold text-emerald-900 flex items-center space-x-1.5 text-xs">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    <span>Status Server Ollama Lokal</span>
-                  </span>
-                  <div id="ollamaStatusBadge" class="flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 font-medium">
-                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                    <span>Mengecek status...</span>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <div>
-                    <label class="block text-[11px] font-semibold text-slate-700 mb-0.5">Ollama Host URL:</label>
-                    <div class="flex space-x-1">
-                      <input type="text" id="ollamaHostInput" value="http://localhost:11434" class="w-full bg-white border border-slate-300 rounded p-1.5 text-slate-700 font-mono text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
-                      <button type="button" onclick="checkOllamaStatus(true)" title="Cek Ulang Koneksi" class="bg-white hover:bg-slate-100 border border-slate-300 px-2 rounded text-slate-600 transition-colors">
-                        🔄
-                      </button>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="block text-[11px] font-semibold text-slate-700 mb-0.5">Pilih Model Ollama:</label>
-                    <select id="ollamaModelSelect" onchange="onOllamaModelSelectChange()" class="w-full bg-white border border-slate-300 rounded p-1.5 text-slate-700 font-mono text-xs focus:ring-1 focus:ring-emerald-500 outline-none">
-                      <option value="qwen2.5:7b" selected>qwen2.5:7b (Sangat Disarankan)</option>
-                      <option value="qwen2.5:3b">qwen2.5:3b (Ringan & Cepat)</option>
-                      <option value="llama3.2:3b">llama3.2:3b (Ringan)</option>
-                      <option value="llama3.1:8b">llama3.1:8b (Standar Akurasi)</option>
-                      <option value="deepseek-r1:7b">deepseek-r1:7b</option>
-                      <option value="custom">-- Ketik Nama Model Lain --</option>
-                    </select>
-                    <input type="text" id="ollamaModelInputCustom" placeholder="Nama model kustom..." class="hidden mt-1 w-full bg-white border border-slate-300 rounded p-1.5 text-slate-700 font-mono text-xs">
-                  </div>
-                </div>
-
-                <!-- OLLAMA HELPER BANNER (IF OFFLINE) -->
-                <div id="ollamaOfflineHelper" class="hidden bg-amber-50 border border-amber-200/80 p-2.5 rounded-lg text-[11px] text-amber-900 space-y-1">
-                  <div class="font-semibold flex items-center space-x-1">
-                    <span>💡 Cara Menjalankan Ollama di Komputer Anda:</span>
-                  </div>
-                  <p class="text-amber-800">
-                    Buka Command Prompt / PowerShell lalu jalankan perintah:
-                  </p>
-                  <div class="flex items-center justify-between bg-white border border-amber-300 px-2 py-1 rounded font-mono text-[10px] text-slate-800 select-all">
-                    <code>ollama run qwen2.5:7b</code>
-                    <button type="button" onclick="navigator.clipboard.writeText('ollama run qwen2.5:7b'); showAlert('Perintah tersalin!', 'info')" class="text-xs text-amber-700 hover:text-amber-900 font-sans ml-2">Salin</button>
-                  </div>
-                  <p class="text-[10px] text-amber-700 pt-0.5">
-                    <em>Catatan: Jika Ollama belum aktif saat Anda menekan tombol "Generate PDF", sistem otomatis menggunakan <strong>Smart Regex Bawaan</strong> sehingga Anda tetap dapat men-generate formulir tanpa kendala!</em>
-                  </p>
-                </div>
-              </div>
-
-              <!-- API KEY FIELD (shown for Gemini & OpenAI) -->
-              <div id="apiKeyGroup" class="hidden">
-                <div class="flex items-center justify-between mb-1">
-                  <label id="apiKeyLabel" class="font-semibold text-slate-700">API Key:</label>
-                  <span class="text-[10px] text-slate-400">Tersimpan di browser saja</span>
-                </div>
-                <div class="relative">
-                  <input type="password" id="apiKeyInput" placeholder="Masukkan API Key..." class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-slate-700 pr-10 focus:ring-1 focus:ring-sky-500 outline-none font-mono text-xs">
-                  <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-2 top-2 text-slate-400 hover:text-slate-600">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- PRIMARY ACTION BUTTONS -->
-          <div class="flex flex-col sm:flex-row gap-2 pt-2">
-            <!-- 1-CLICK GENERATE PDF BUTTON (PRIMARY) -->
+          <!-- PRIMARY ACTION FOOTER -->
+          <div class="flex flex-col sm:flex-row gap-2 pt-3 mt-auto border-t border-black/[0.06]">
             <button
               type="button"
-              id="btnGeneratePdf"
               onclick="handleGeneratePdfDirect()"
-              class="flex-1 bg-dukcapil-700 hover:bg-dukcapil-800 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2 text-sm active:scale-[0.99]"
+              class="btn-dark-pill flex-1 py-2.5 px-5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
             >
-              <svg class="w-5 h-5 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
+              <svg-icon name="download" size="15"></svg-icon>
               <span>Generate PDF F-2.01 A</span>
             </button>
-
-            <!-- SECONDARY: EXTRACT & REVIEW -->
             <button
               type="button"
-              id="btnExtractReview"
               onclick="handleExtractReview()"
-              class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold py-3 px-4 rounded-xl shadow-sm transition-all flex items-center justify-center space-x-1.5 text-xs hover:border-slate-400"
+              class="py-2.5 px-4 rounded-full bg-[#F4F5F7] hover:bg-[#E5E6E9] text-[#1E1E20] border border-black/[0.08] font-semibold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <svg class="w-4 h-4 text-dukcapil-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
-              <span>Ekstrak & Tinjau</span>
+              <svg-icon name="search" size="14"></svg-icon>
+              <span>Ekstrak &amp; Tinjau</span>
             </button>
           </div>
+        </bento-card>
 
-          <!-- STATUS & ALERTS -->
-          <div id="statusAlert" class="hidden p-3 rounded-xl text-xs flex items-center space-x-2"></div>
-        </div>
+        <!-- RIGHT BENTO CARD: PDF VIEWER & INTERACTIVE DATA EDITOR (7 cols) -->
+        <bento-card variant="light" class="lg:col-span-7 overflow-hidden flex flex-col min-h-[640px]">
 
-        <!-- QUICK GUIDELINE NOTE -->
-        <div class="bg-dukcapil-50/70 border border-dukcapil-100 rounded-xl p-3.5 text-xs text-dukcapil-900 space-y-1">
-          <div class="font-semibold flex items-center space-x-1.5 text-dukcapil-800">
-            <svg class="w-4 h-4 text-dukcapil-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-            <span>Petunjuk Penggunaan:</span>
-          </div>
-          <p class="text-slate-600 leading-relaxed">
-            1. Salin teks data kelahiran/kematian dari web lain.<br>
-            2. Tempelkan ke textarea di atas.<br>
-            3. Klik <strong>"Generate PDF F-2.01 A"</strong> untuk langsung melihat dan mengunduh formulir resmi.
-          </p>
-        </div>
-
-      </section>
-
-      <!-- RIGHT COLUMN: RESULTS & PREVIEW (7 cols on lg) -->
-      <section class="lg:col-span-7 flex flex-col space-y-4">
-        
-        <!-- MAIN OUTPUT CARD -->
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col h-[750px]">
-          
-          <!-- TABS HEADER -->
-          <div class="bg-slate-50 border-b border-slate-200 px-4 pt-3 flex items-center justify-between">
-            <div class="flex space-x-2">
-              <button id="tabBtnPdf" onclick="switchTab('pdf')" class="px-4 py-2 text-xs font-bold rounded-t-lg border-b-2 border-dukcapil-600 text-dukcapil-900 bg-white flex items-center space-x-1.5">
-                <svg class="w-4 h-4 text-dukcapil-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+          <!-- TABS & PDF TOOLBAR -->
+          <div class="px-5 py-3.5 border-b border-black/[0.06] flex flex-wrap items-center justify-between gap-2.5 bg-white">
+            <div class="inline-flex p-1 rounded-full bg-[#F4F5F7] border border-black/[0.06]">
+              <button
+                type="button"
+                id="tabBtnPdf"
+                onclick="switchTab('pdf')"
+                class="px-4 py-1.5 text-xs font-semibold rounded-full bg-[#1E1E20] text-white transition-all flex items-center gap-1.5"
+              >
+                <svg-icon name="fileText" size="14"></svg-icon>
                 <span>Pratinjau PDF F-2.01 A</span>
               </button>
-              <button id="tabBtnData" onclick="switchTab('data')" class="px-4 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-1.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                <span>Elemen Data Terdeteksi (<span id="detectedCount">0</span>)</span>
+              <button
+                type="button"
+                id="tabBtnData"
+                onclick="switchTab('data')"
+                class="px-4 py-1.5 text-xs font-medium rounded-full text-[#6B6B70] hover:text-[#1E1E20] transition-all flex items-center gap-1.5"
+              >
+                <svg-icon name="listChecks" size="14"></svg-icon>
+                <span>Elemen Terdeteksi (<span id="detectedCount" class="tabular-nums">0</span>)</span>
               </button>
             </div>
-            
-            <!-- ACTION BUTTONS FOR PDF -->
-            <div id="pdfActionButtons" class="flex items-center space-x-2 pb-1.5 hidden">
-              <span id="pdfFilenameBadge" class="text-[11px] font-mono text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md max-w-[220px] truncate hidden sm:inline-block"></span>
-              <button type="button" onclick="downloadCurrentPdf()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm flex items-center space-x-1 transition-all">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+
+            <!-- ACTION BUTTONS FOR GENERATED PDF -->
+            <div id="pdfActionButtons" class="flex items-center gap-2 hidden">
+              <span id="pdfFilenameBadge" class="text-[11px] font-mono text-[#6B6B70] bg-[#F4F5F7] border border-black/[0.06] px-3 py-1 rounded-full max-w-[190px] truncate hidden sm:inline-block"></span>
+              <button
+                type="button"
+                onclick="downloadCurrentPdf()"
+                class="btn-dark-pill h-9 px-4 text-xs font-semibold inline-flex items-center gap-1.5"
+              >
+                <svg-icon name="download" size="14"></svg-icon>
                 <span>Unduh PDF</span>
               </button>
-              <button type="button" onclick="openPdfInNewTab()" title="Buka di tab baru / Cetak" class="bg-slate-200 hover:bg-slate-300 text-slate-700 p-1.5 rounded-lg transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+              <button
+                type="button"
+                onclick="openPdfInNewTab()"
+                title="Buka di tab baru / Cetak"
+                class="btn-circle-white !w-9 !h-9"
+              >
+                <svg-icon name="externalLink" size="15"></svg-icon>
               </button>
             </div>
           </div>
 
           <!-- TAB 1: PDF VIEWER CONTAINER -->
-          <div id="tabContentPdf" class="flex-1 flex flex-col bg-slate-100 relative">
-            <div id="emptyPdfState" class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400 space-y-3">
-              <div class="w-16 h-16 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-300">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-              </div>
-              <div>
-                <p class="font-semibold text-slate-600 text-sm">Belum ada PDF yang dibuat</p>
-                <p class="text-xs text-slate-400 mt-1 max-w-sm">Klik salah satu contoh copas di sebelah kiri, lalu tekan tombol <strong>"Generate PDF F-2.01 A"</strong> untuk melihat hasil pratinjau langsung di sini.</p>
+          <div id="tabContentPdf" class="flex-1 flex flex-col bg-[#F4F5F7] relative min-h-[560px]">
+            <div id="emptyPdfState" class="flex-1 flex flex-col items-center justify-center p-6 sm:p-10 text-center">
+              <div class="w-full max-w-md border-2 border-dashed border-neutral-400/70 rounded-[24px] p-7 sm:p-9 bg-white/60 flex flex-col items-center space-y-5">
+                <!-- Architectural Wireframe Form F-2.01 A Preview -->
+                <div class="pdf-wireframe-sheet text-left space-y-2.5" aria-hidden="true">
+                  <div class="flex items-center justify-between border-b border-black/10 pb-2">
+                    <div class="space-y-1">
+                      <div class="w-16 h-1.5 rounded-full bg-[#1E1E20]"></div>
+                      <div class="w-24 h-1 rounded-full bg-[#D2D4D9]"></div>
+                    </div>
+                    <span class="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#1E1E20] text-white">F-2.01 A</span>
+                  </div>
+                  <div class="space-y-1.5">
+                    <div class="w-full h-1.5 rounded-full bg-[#E5E6E9]"></div>
+                    <div class="w-4/5 h-1.5 rounded-full bg-[#E5E6E9]"></div>
+                    <div class="w-11/12 h-1.5 rounded-full bg-[#E5E6E9]"></div>
+                  </div>
+                  <div class="grid grid-cols-4 gap-1 pt-1">
+                    <div class="h-2.5 rounded bg-[#F4F5F7] border border-black/10"></div>
+                    <div class="h-2.5 rounded bg-[#F4F5F7] border border-black/10"></div>
+                    <div class="h-2.5 rounded bg-[#F4F5F7] border border-black/10"></div>
+                    <div class="h-2.5 rounded bg-[#1E1E20]"></div>
+                  </div>
+                  <div class="pt-2 flex justify-end">
+                    <div class="w-14 h-4 rounded border border-dashed border-black/20"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="font-bold text-[#1E1E20] text-sm">Pratinjau Formulir Siap Cetak</p>
+                  <p class="text-xs text-[#6B6B70] mt-1.5 leading-relaxed max-w-xs mx-auto">
+                    Tempelkan data mentah pada kolom di sebelah kiri atau pilih salah satu <strong>Contoh</strong>, lalu tekan <strong>Generate PDF</strong>.
+                  </p>
+                </div>
               </div>
             </div>
 
             <!-- PDF IFRAME -->
-            <iframe id="pdfIframe" class="w-full h-full hidden border-none" src="about:blank"></iframe>
+            <iframe id="pdfIframe" class="w-full h-full flex-1 hidden border-none" src="about:blank"></iframe>
 
             <!-- LOADING SPINNER OVERLAY -->
-            <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 z-30">
-              <div class="w-10 h-10 border-4 border-dukcapil-200 border-t-dukcapil-600 rounded-full animate-spin"></div>
-              <p id="loadingText" class="text-xs font-semibold text-dukcapil-900">Mengekstrak data & mengisi formulir F-2.01 A...</p>
+            <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/80 backdrop-blur-md flex flex-col items-center justify-center space-y-3 z-30">
+              <div class="w-10 h-10 mono-spinner animate-spin"></div>
+              <p id="loadingText" class="text-xs font-semibold text-[#1E1E20]">Mengekstrak data &amp; mengisi formulir F-2.01 A...</p>
             </div>
           </div>
 
           <!-- TAB 2: DETECTED ELEMENTS INTERACTIVE FORM -->
-          <div id="tabContentData" class="flex-1 flex flex-col p-4 overflow-y-auto hidden bg-slate-50/50 space-y-4">
-            <div class="flex items-center justify-between bg-sky-50 border border-sky-200 p-3 rounded-xl text-xs text-sky-900">
-              <span>Data di bawah ini diekstrak secara otomatis dari teks mentah. Anda dapat mengedit atau melengkapi sebelum men-generate ulang PDF.</span>
-              <button type="button" onclick="handleGenerateFromEditor()" class="bg-dukcapil-700 hover:bg-dukcapil-800 text-white font-bold px-3 py-1.5 rounded-lg shadow text-xs flex-shrink-0 ml-3">
-                Update & Generate PDF
+          <div id="tabContentData" class="flex-1 flex flex-col p-5 overflow-y-auto hidden bg-[#F4F5F7] space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white border border-black/[0.06] p-3.5 rounded-2xl text-xs text-[#6B6B70]">
+              <div class="flex items-center gap-3">
+                <circular-progress id="editorProgressRing" value="0" max="21" size="34" tone="light"></circular-progress>
+                <span>Periksa atau lengkapi elemen terdeteksi sebelum memperbarui PDF F-2.01 A.</span>
+              </div>
+              <button type="button" onclick="handleGenerateFromEditor()" class="btn-dark-pill px-4 py-2 text-xs font-semibold shrink-0">
+                Update &amp; Generate PDF
               </button>
             </div>
 
-            <!-- FORM GROUPS -->
+            <!-- EDITOR SUB-CARDS -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              <!-- GROUP: JENIS & WILAYAH -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
-                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-sky-500"></span>
-                  <span>1. Peristiwa & Wilayah</span>
+
+              <!-- GROUP 1: JENIS & WILAYAH -->
+              <div class="bg-white p-4 rounded-2xl border border-black/[0.06] space-y-2.5">
+                <h3 class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">01</span>
+                  <span>Peristiwa &amp; Wilayah</span>
                 </h3>
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Jenis Pelaporan:</label>
-                  <select id="f_jenis_pelaporan" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                  <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Jenis Pelaporan:</label>
+                  <select id="f_jenis_pelaporan" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                     <option value="Kelahiran">Kelahiran</option>
                     <option value="Lahir Mati">Lahir Mati</option>
                     <option value="Kematian">Kematian</option>
@@ -532,182 +804,337 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Provinsi:</label>
-                    <input type="text" id="f_wilayah_provinsi" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Provinsi:</label>
+                    <input type="text" id="f_wilayah_provinsi" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Kab/Kota:</label>
-                    <input type="text" id="f_wilayah_kab_kota" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Kab/Kota:</label>
+                    <input type="text" id="f_wilayah_kab_kota" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Kecamatan:</label>
-                    <input type="text" id="f_wilayah_kecamatan" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Kecamatan:</label>
+                    <input type="text" id="f_wilayah_kecamatan" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Desa/Kelurahan:</label>
-                    <input type="text" id="f_wilayah_kelurahan" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Desa/Kelurahan:</label>
+                    <input type="text" id="f_wilayah_kelurahan" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                   </div>
                 </div>
               </div>
 
-              <!-- GROUP: SUBJEK AKTA / BAYI -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
-                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  <span>2. Bayi / Subjek Akta</span>
+              <!-- GROUP 2: SUBJEK AKTA / BAYI -->
+              <div class="bg-white p-4 rounded-2xl border border-black/[0.06] space-y-2.5">
+                <h3 class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">02</span>
+                  <span>Bayi / Subjek Akta</span>
                 </h3>
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Nama Bayi / Subjek:</label>
-                  <input type="text" id="f_bayi_nama" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-bold text-slate-800">
+                  <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Nama Bayi / Subjek:</label>
+                  <input type="text" id="f_bayi_nama" class="w-full mono-input p-2 text-xs font-bold bg-[#F4F5F7]">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Jenis Kelamin:</label>
-                    <select id="f_bayi_jk" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Jenis Kelamin:</label>
+                    <select id="f_bayi_jk" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                       <option value="Laki-Laki">1. Laki-Laki</option>
                       <option value="Perempuan">2. Perempuan</option>
                     </select>
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Tempat Lahir (RS/Klinik):</label>
-                    <input type="text" id="f_bayi_faskes" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Tempat Lahir (RS/Klinik):</label>
+                    <input type="text" id="f_bayi_faskes" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Hari Lahir:</label>
-                    <input type="text" id="f_bayi_hari" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs" placeholder="Senin">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Hari Lahir:</label>
+                    <input type="text" id="f_bayi_hari" placeholder="Senin" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Tanggal (DD-MM-YYYY):</label>
-                    <div class="flex space-x-1">
-                      <input type="text" id="f_bayi_tgl" placeholder="DD" class="w-1/3 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
-                      <input type="text" id="f_bayi_bln" placeholder="MM" class="w-1/3 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
-                      <input type="text" id="f_bayi_thn" placeholder="YYYY" class="w-1/3 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Tanggal (DD-MM-YYYY):</label>
+                    <div class="flex gap-1">
+                      <input type="text" id="f_bayi_tgl" placeholder="DD" class="w-1/3 mono-input p-2 text-xs text-center font-mono bg-[#F4F5F7]">
+                      <input type="text" id="f_bayi_bln" placeholder="MM" class="w-1/3 mono-input p-2 text-xs text-center font-mono bg-[#F4F5F7]">
+                      <input type="text" id="f_bayi_thn" placeholder="YYYY" class="w-1/3 mono-input p-2 text-xs text-center font-mono bg-[#F4F5F7]">
                     </div>
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Pukul (Jam : Menit):</label>
-                    <div class="flex space-x-1">
-                      <input type="text" id="f_bayi_jam" placeholder="07" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
-                      <input type="text" id="f_bayi_menit" placeholder="45" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Pukul (Jam : Menit):</label>
+                    <div class="flex gap-1">
+                      <input type="text" id="f_bayi_jam" placeholder="07" class="w-1/2 mono-input p-2 text-xs text-center font-mono bg-[#F4F5F7]">
+                      <input type="text" id="f_bayi_menit" placeholder="45" class="w-1/2 mono-input p-2 text-xs text-center font-mono bg-[#F4F5F7]">
                     </div>
                   </div>
                   <div>
-                    <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Berat (Kg) & PB (cm):</label>
-                    <div class="flex space-x-1">
-                      <input type="text" id="f_bayi_berat" placeholder="Kg" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
-                      <input type="text" id="f_bayi_panjang" placeholder="cm" class="w-1/2 bg-slate-50 border border-slate-300 rounded p-1.5 text-xs text-center font-mono">
+                    <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Berat (Kg) &amp; PB (cm):</label>
+                    <div class="flex gap-1">
+                      <input type="text" id="f_bayi_berat" placeholder="Kg" class="w-1/2 mono-input p-2 text-xs text-center font-mono bg-[#F4F5F7]">
+                      <input type="text" id="f_bayi_panjang" placeholder="cm" class="w-1/2 mono-input p-2 text-xs text-center font-mono bg-[#F4F5F7]">
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- GROUP: ORANG TUA -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
-                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-                  <span>3. Data Orang Tua</span>
+              <!-- GROUP 3: ORANG TUA -->
+              <div class="bg-white p-4 rounded-2xl border border-black/[0.06] space-y-2.5">
+                <h3 class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">03</span>
+                  <span>Data Orang Tua</span>
                 </h3>
                 <div class="space-y-2">
-                  <div class="p-2 bg-slate-50 rounded-lg border border-slate-200/60 space-y-1.5">
-                    <span class="text-[10px] font-bold text-slate-500 uppercase">Ayah Kandung:</span>
-                    <input type="text" id="f_ayah_nama" placeholder="Nama Ayah" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs">
-                    <input type="text" id="f_ayah_nik" placeholder="NIK Ayah (16 digit)" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs font-mono">
+                  <div class="p-2.5 bg-[#F4F5F7] rounded-xl border border-black/[0.05] space-y-1.5">
+                    <span class="text-[10px] font-bold text-[#6B6B70] uppercase tracking-wider">Ayah Kandung</span>
+                    <input type="text" id="f_ayah_nama" placeholder="Nama Ayah" class="w-full mono-input p-2 text-xs">
+                    <input type="text" id="f_ayah_nik" placeholder="NIK Ayah (16 digit)" class="w-full mono-input p-2 text-xs font-mono">
                   </div>
-                  <div class="p-2 bg-slate-50 rounded-lg border border-slate-200/60 space-y-1.5">
-                    <span class="text-[10px] font-bold text-slate-500 uppercase">Ibu Kandung:</span>
-                    <input type="text" id="f_ibu_nama" placeholder="Nama Ibu" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs">
-                    <input type="text" id="f_ibu_nik" placeholder="NIK Ibu (16 digit)" class="w-full bg-white border border-slate-300 rounded p-1.5 text-xs font-mono">
+                  <div class="p-2.5 bg-[#F4F5F7] rounded-xl border border-black/[0.05] space-y-1.5">
+                    <span class="text-[10px] font-bold text-[#6B6B70] uppercase tracking-wider">Ibu Kandung</span>
+                    <input type="text" id="f_ibu_nama" placeholder="Nama Ibu" class="w-full mono-input p-2 text-xs">
+                    <input type="text" id="f_ibu_nik" placeholder="NIK Ibu (16 digit)" class="w-full mono-input p-2 text-xs font-mono">
                   </div>
                 </div>
               </div>
 
-              <!-- GROUP: PELAPOR & KELUARGA -->
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
-                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
-                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                  <span>4. Pelapor & Kartu Keluarga</span>
+              <!-- GROUP 4: PELAPOR & KELUARGA -->
+              <div class="bg-white p-4 rounded-2xl border border-black/[0.06] space-y-2.5">
+                <h3 class="text-[11px] font-bold text-[#1E1E20] uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#E5E6E9] text-[#1E1E20] leading-none">04</span>
+                  <span>Pelapor &amp; Kartu Keluarga</span>
                 </h3>
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Nomor Kartu Keluarga (KK):</label>
-                  <input type="text" id="f_nomor_kk" placeholder="16 digit No. KK" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-mono font-bold text-dukcapil-700">
+                  <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Nomor Kartu Keluarga (KK):</label>
+                  <input type="text" id="f_nomor_kk" placeholder="16 digit No. KK" class="w-full mono-input p-2 text-xs font-mono font-bold bg-[#F4F5F7]">
                 </div>
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Nama Pelapor:</label>
-                  <input type="text" id="f_pelapor_nama" placeholder="Nama Pelapor" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs">
+                  <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Nama Pelapor:</label>
+                  <input type="text" id="f_pelapor_nama" placeholder="Nama Pelapor" class="w-full mono-input p-2 text-xs bg-[#F4F5F7]">
                 </div>
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">NIK Pelapor:</label>
-                  <input type="text" id="f_pelapor_nik" placeholder="NIK Pelapor" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-mono">
+                  <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">NIK Pelapor:</label>
+                  <input type="text" id="f_pelapor_nik" placeholder="NIK Pelapor" class="w-full mono-input p-2 text-xs font-mono bg-[#F4F5F7]">
                 </div>
               </div>
 
             </div>
           </div>
 
-        </div>
+        </bento-card>
+
+      </section>
+
+      <!-- ===============================================================
+           ROW 3: AI CONFIGURATION & PRIVACY COMPLIANCE BENTO ROW
+           =============================================================== -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+
+        <!-- AI ENGINE & OLLAMA CONFIG BENTO CARD (7 cols) -->
+        <bento-card variant="light" id="aiConfigCard" class="lg:col-span-7 overflow-hidden flex flex-col">
+          <button
+            type="button"
+            onclick="toggleConfigAccordion()"
+            class="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-[#F4F5F7]/70 transition-colors"
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="w-9 h-9 rounded-full bg-[#1E1E20] text-white flex items-center justify-center shrink-0">
+                <svg-icon name="cpu" size="16"></svg-icon>
+              </span>
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-[#1E1E20] uppercase tracking-wider">Konfigurasi Mesin AI</div>
+                <div class="text-xs text-[#6B6B70] truncate mt-0.5">
+                  Aktif: <span id="currentEngineBadge" class="text-[#1E1E20] font-semibold">Local Ollama (100% Offline &amp; Privat)</span>
+                </div>
+              </div>
+            </div>
+            <svg-icon id="accordionChevron" name="chevronDown" size="18" class="text-[#6B6B70] transition-transform duration-200"></svg-icon>
+          </button>
+
+          <div id="configContent" class="px-5 pb-5 pt-3 border-t border-black/[0.06] space-y-3 text-xs flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
+              <div class="sm:col-span-6 flex flex-col justify-end">
+                <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Mesin Ekstraksi:</label>
+                <select id="aiEngineSelect" onchange="onEngineChange()" class="w-full mono-input p-2.5 text-xs font-medium bg-[#F4F5F7]">
+                  <option value="ollama" selected>Local AI via Ollama (Offline &amp; Privat)</option>
+                  <option value="regex">Smart Regex Bawaan (Offline Instan)</option>
+                  <option value="gemini">Google Gemini 2.5 Flash (Cloud API)</option>
+                  <option value="openai">OpenAI GPT-4o-mini (Cloud API)</option>
+                </select>
+              </div>
+              <div class="sm:col-span-6 flex items-end">
+                <p id="engineHint" class="w-full text-[11px] text-[#6B6B70] bg-[#F4F5F7] rounded-xl p-2.5 border border-black/[0.05] leading-snug">
+                  Berjalan 100% lokal di komputer Anda. Data kependudukan tidak pernah keluar ke internet.
+                </p>
+              </div>
+            </div>
+
+            <!-- OLLAMA HOST & MODEL -->
+            <div id="ollamaGroup" class="space-y-3 bg-[#F4F5F7] border border-black/[0.06] p-3.5 rounded-2xl">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="font-bold text-[#1E1E20] flex items-center gap-1.5 text-xs">
+                  <svg-icon name="shieldCheck" size="15"></svg-icon>
+                  <span>Status Server Ollama Lokal</span>
+                </span>
+                <div id="ollamaStatusBadge" class="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full bg-[#E5E6E9] text-[#6B6B70] font-medium">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#6B6B70]"></span>
+                  <span>Mengecek status...</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Ollama Host URL:</label>
+                  <div class="flex gap-1.5">
+                    <input type="text" id="ollamaHostInput" value="http://localhost:11434" class="w-full mono-input p-2 font-mono text-xs">
+                    <button type="button" onclick="checkOllamaStatus(true)" title="Cek Ulang Koneksi" class="w-9 h-9 rounded-xl bg-white hover:bg-[#E5E6E9] border border-black/[0.1] flex items-center justify-center text-[#1E1E20] shrink-0 transition-colors">
+                      <svg-icon name="refresh" size="14"></svg-icon>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-[#6B6B70] mb-1">Model Ollama:</label>
+                  <select id="ollamaModelSelect" onchange="onOllamaModelSelectChange()" class="w-full mono-input p-2 font-mono text-xs">
+                    <option value="qwen2.5:7b" selected>qwen2.5:7b (Disarankan)</option>
+                    <option value="qwen2.5:3b">qwen2.5:3b (Ringan)</option>
+                    <option value="llama3.2:3b">llama3.2:3b (Ringan)</option>
+                    <option value="llama3.1:8b">llama3.1:8b (Standar)</option>
+                    <option value="deepseek-r1:7b">deepseek-r1:7b</option>
+                    <option value="custom">-- Ketik Nama Model Lain --</option>
+                  </select>
+                  <input type="text" id="ollamaModelInputCustom" placeholder="Nama model kustom..." class="hidden mt-1.5 w-full mono-input p-2 font-mono text-xs">
+                </div>
+              </div>
+
+              <!-- OLLAMA OFFLINE HELPER -->
+              <div id="ollamaOfflineHelper" class="hidden bg-white border border-black/[0.08] p-3 rounded-xl text-[11px] text-[#6B6B70] space-y-1.5">
+                <div class="font-semibold text-[#1E1E20] flex items-center gap-1.5">
+                  <svg-icon name="info" size="14"></svg-icon>
+                  <span>Ollama belum aktif di perangkat Anda</span>
+                </div>
+                <div class="flex items-center justify-between bg-[#F4F5F7] border border-black/[0.06] px-2.5 py-1.5 rounded-lg font-mono text-[10px] text-[#1E1E20] select-all">
+                  <code>ollama run qwen2.5:7b</code>
+                  <button type="button" onclick="navigator.clipboard.writeText('ollama run qwen2.5:7b'); showAlert('Perintah tersalin!', 'info')" class="text-[11px] font-sans font-semibold text-[#1E1E20] hover:underline ml-2 inline-flex items-center gap-1">
+                    <svg-icon name="copy" size="12"></svg-icon>
+                    <span>Salin</span>
+                  </button>
+                </div>
+                <p class="text-[10px] text-[#6B6B70]">
+                  Jika Ollama tidak aktif saat Generate PDF ditekan, sistem otomatis memakai <strong>Smart Regex Bawaan</strong> secara offline.
+                </p>
+              </div>
+            </div>
+
+            <!-- API KEY FIELD (Gemini / OpenAI) -->
+            <div id="apiKeyGroup" class="hidden bg-[#F4F5F7] border border-black/[0.06] p-3.5 rounded-2xl">
+              <div class="flex items-center justify-between mb-1.5">
+                <label id="apiKeyLabel" class="font-semibold text-[#1E1E20]">API Key:</label>
+                <span class="text-[10px] text-[#6B6B70]">Disimpan lokal di browser</span>
+              </div>
+              <div class="relative">
+                <input type="password" id="apiKeyInput" placeholder="Masukkan API Key..." class="w-full mono-input p-2.5 pr-10 font-mono text-xs">
+                <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-2.5 top-2.5 text-[#6B6B70] hover:text-[#1E1E20]" aria-label="Tampilkan API Key">
+                  <svg-icon name="eye" size="16"></svg-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </bento-card>
+
+        <!-- PRIVACY & WORKFLOW GUIDE BENTO CARD (5 cols) -->
+        <bento-card variant="muted" lift class="lg:col-span-5 p-5 flex flex-col justify-between gap-4">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold uppercase tracking-widest text-[#6B6B70]">Keamanan &amp; Alur Kerja</span>
+              <span class="px-2.5 py-1 rounded-full bg-[#1E1E20] text-white text-[10px] font-semibold inline-flex items-center gap-1">
+                <svg-icon name="lock" size="11"></svg-icon>
+                <span>UU PDP 27/2022</span>
+              </span>
+            </div>
+
+            <div class="bg-white/80 rounded-2xl p-3.5 border border-black/[0.05] text-xs text-[#6B6B70] leading-relaxed">
+              <strong class="text-[#1E1E20]">Zero-Storage:</strong> Tidak ada teks, NIK, No. KK, atau berkas PDF yang disimpan ke database maupun disk server. Seluruh proses berlangsung 100% di memori sementara (RAM).
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-[11px]">
+              <div class="bg-white/65 rounded-xl p-2.5 border border-black/[0.04]">
+                <div class="font-mono font-bold text-[#1E1E20]">01</div>
+                <div class="text-[#6B6B70] mt-0.5 leading-snug">Tempel data SIAK / RS / WA</div>
+              </div>
+              <div class="bg-white/65 rounded-xl p-2.5 border border-black/[0.04]">
+                <div class="font-mono font-bold text-[#1E1E20]">02</div>
+                <div class="text-[#6B6B70] mt-0.5 leading-snug">Ekstrak &amp; tinjau elemen</div>
+              </div>
+              <div class="bg-white/65 rounded-xl p-2.5 border border-black/[0.04]">
+                <div class="font-mono font-bold text-[#1E1E20]">03</div>
+                <div class="text-[#6B6B70] mt-0.5 leading-snug">Unduh PDF resmi siap cetak</div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onclick="toggleAiGuideModal()"
+            class="w-full py-2.5 px-4 rounded-full bg-white hover:bg-[#1E1E20] hover:text-white text-[#1E1E20] border border-black/[0.08] text-xs font-semibold transition-all flex items-center justify-center gap-2"
+          >
+            <svg-icon name="info" size="14"></svg-icon>
+            <span>Buka Panduan Lengkap &amp; Skema AI</span>
+          </button>
+        </bento-card>
 
       </section>
 
     </div>
-  </main>
+  </div>
 
-  <!-- MODAL: SARAN PENGGUNAAN AI & UU PDP -->
-  <div id="aiGuideModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-        <div class="flex items-center space-x-2">
-          <div class="w-8 h-8 rounded-lg bg-dukcapil-100 text-dukcapil-700 flex items-center justify-center font-bold text-sm">
-            AI
+  <!-- MODAL: SARAN PENGGUNAAN AI & UU PDP (MONOCHROME GLASS BENTO) -->
+  <div id="aiGuideModal" class="hidden fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-[24px] max-w-2xl w-full p-6 shadow-2xl border border-black/[0.08] space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-black/[0.08]">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-[#F4F5F7] border border-black/[0.06] p-1 flex items-center justify-center">
+            <img src="/static/logo-madiun.png" alt="Logo Kabupaten Madiun" class="h-7 w-auto object-contain">
           </div>
-          <h3 class="text-base font-bold text-slate-800">Saran Penggunaan AI untuk Ekstraksi Data F-2.01 A</h3>
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-[#1E1E20]">Panduan Ekstraksi AI &amp; Kepatuhan UU PDP</h3>
+            <p class="text-[11px] text-[#6B6B70]">Disdukcapil Kabupaten Madiun · Formulir F-2.01 A</p>
+          </div>
         </div>
-        <button onclick="toggleAiGuideModal()" class="text-slate-400 hover:text-slate-600 p-1">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button onclick="toggleAiGuideModal()" class="btn-circle-white !w-8 !h-8" aria-label="Tutup modal">
+          <svg-icon name="x" size="16"></svg-icon>
         </button>
       </div>
 
-      <div class="space-y-4 text-xs text-slate-600 leading-relaxed">
-        
-        <div class="bg-sky-50 border border-sky-200 p-3.5 rounded-xl space-y-1">
-          <h4 class="font-bold text-sky-900 text-sm">1. Mengapa AI (LLM) Sangat Tepat untuk Data Mentah Copas?</h4>
-          <p>Teks hasil copy-paste dari portal rumah sakit, SIMRS, Puskesmas, atau chat WhatsApp tidak memiliki format yang seragam. Kadang nama ayah diawali "Tn.", ibu "Ny.", berat ditulis "3200 gr" atau "3.2 kg", dan tanggal ditulis format "Rabu Wage 18 Nov 2026". AI dapat memahami konteks semantik tersebut dan memetakannya langsung ke format baku Dukcapil.</p>
+      <div class="space-y-3 text-xs text-[#6B6B70] leading-relaxed">
+        <div class="bg-[#F4F5F7] border border-black/[0.06] p-4 rounded-2xl space-y-1">
+          <h4 class="font-bold text-[#1E1E20] text-xs uppercase tracking-wider">1. Mengapa AI (LLM) Tepat untuk Data Mentah Copas?</h4>
+          <p>Teks hasil copy-paste dari SIAK Terpusat (Ctrl+A), SIMRS rumah sakit, Puskesmas, atau chat WhatsApp memiliki format yang tidak seragam. AI mampu memahami konteks semantik seperti penulisan "Tn."/"Ny.", satuan gram ke kilogram, serta memisahkan tabel anggota keluarga secara akurat.</p>
         </div>
 
-        <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl space-y-1">
-          <h4 class="font-bold text-emerald-900 text-sm">2. Rekomendasi Model: Privasi vs Kecepatan</h4>
-          <ul class="list-disc pl-4 space-y-1.5 mt-2">
-            <li><strong>Opsi Terbaik untuk Privasi (Instansi / RS): Local AI via Ollama (Qwen 2.5 7B atau Llama 3.1 8B)</strong><br>
-              Data NIK, No. KK, dan identitas keluarga adalah <em>Personally Identifiable Information</em> (PII) yang dilindungi <strong>UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP)</strong>. Dengan model lokal Ollama, 100% komputasi AI berjalan di server internal tanpa ada 1 byte pun data yang keluar ke internet.</li>
-            <li><strong>Opsi Terbaik untuk Akurasi & Kecepatan: Google Gemini 2.5 Flash</strong><br>
-              Memiliki pemahaman Bahasa Indonesia yang luar biasa, latency sangat cepat (&plusmn;1 detik), dan mendukung <em>Structured JSON Outputs</em> sehingga output terjamin valid sesuai skema formulir F-2.01 A.</li>
-            <li><strong>Opsi Bawaan Tanpa Setup: Smart Regex Parser (Offline)</strong><br>
-              Sistem ini telah dilengkapi mesin regex pintar yang dapat mendeteksi pola 16 digit NIK, No KK, tanggal, jam, dan berat secara otomatis tanpa butuh API key atau internet sama sekali.</li>
+        <div class="bg-[#E5E6E9]/70 border border-black/[0.06] p-4 rounded-2xl space-y-2">
+          <h4 class="font-bold text-[#1E1E20] text-xs uppercase tracking-wider">2. Pilihan Mesin Ekstraksi</h4>
+          <ul class="list-disc pl-4 space-y-1.5">
+            <li><strong class="text-[#1E1E20]">Local AI via Ollama (Qwen 2.5 7B / Llama 3.1 8B):</strong> 100% komputasi berjalan lokal tanpa 1 byte pun data NIK/KK keluar ke internet (UU No. 27 Tahun 2022).</li>
+            <li><strong class="text-[#1E1E20]">Smart Regex Parser (Offline):</strong> Deteksi instan tanpa LLM atau API Key untuk pola NIK 16 digit, No. KK, tanggal, jam, berat, dan tabel SIAK.</li>
+            <li><strong class="text-[#1E1E20]">Google Gemini 2.5 Flash / OpenAI GPT-4o-mini:</strong> Opsi cloud API dengan Structured JSON Outputs berlatensi rendah.</li>
           </ul>
         </div>
 
-        <div class="bg-slate-100 p-3.5 rounded-xl space-y-1 font-mono text-[11px]">
-          <h4 class="font-bold font-sans text-slate-800 text-xs">3. Skema JSON Ekstraksi (Pydantic / Structured Output):</h4>
-          <p class="text-slate-500">Sistem mengirimkan instruksi sistem agar AI menghasilkan JSON terstruktur tanpa markdown wrapper:</p>
-          <pre class="bg-white p-2 rounded border border-slate-200 overflow-x-auto text-slate-700 mt-1">
-{
-  "jenis_pelaporan": "Kelahiran" | "Kematian",
+        <div class="bg-[#1E1E20] text-white p-4 rounded-2xl space-y-1.5 font-mono text-[11px]">
+          <h4 class="font-bold font-sans text-white text-xs uppercase tracking-wider">3. Skema JSON Terstruktur</h4>
+          <pre class="bg-[#2A2A2D] p-3 rounded-xl border border-white/10 overflow-x-auto text-white/90">{
+  "jenis_pelaporan": "Kelahiran" | "Lahir Mati" | "Kematian",
   "wilayah": { "provinsi": "...", "kabupaten_kota": "...", ... },
   "pelapor": { "nama": "...", "nik": "16-digit", "nomor_kk": "..." },
   "kelahiran": { "nama_bayi": "...", "jenis_kelamin": "...", ... }
 }</pre>
         </div>
-
       </div>
 
-      <div class="pt-3 border-t border-slate-200 flex justify-end">
-        <button onclick="toggleAiGuideModal()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-4 py-2 rounded-xl text-xs">
+      <div class="pt-3 border-t border-black/[0.08] flex justify-end">
+        <button onclick="toggleAiGuideModal()" class="btn-dark-pill px-5 py-2 text-xs font-semibold">
           Tutup Panduan
         </button>
       </div>
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT BUSINESS LOGIC (PRESERVED & SYNCED WITH MONOCHROME BENTO UI) -->
   <script>
     // State
     let currentExtractedData = null;
@@ -716,66 +1143,162 @@
     let currentOrtuMode = 'combined'; // 'combined' or 'split'
     let currentEventType = 'Kelahiran'; // 'Kelahiran', 'Lahir Mati', 'Kematian'
 
+    // Update live 5-section input completeness rings & chips
+    function updateInputProgress() {
+      const boxPeristiwa = (document.getElementById("box_peristiwa")?.value || "").trim();
+      const boxPelapor = (document.getElementById("box_pelapor")?.value || "").trim();
+      const boxOrtu = (document.getElementById("box_orangtua")?.value || "").trim();
+      const boxAyah = (document.getElementById("box_ayah")?.value || "").trim();
+      const boxIbu = (document.getElementById("box_ibu")?.value || "").trim();
+      const boxSaksi1 = (document.getElementById("box_saksi1")?.value || "").trim();
+      const boxSaksi2 = (document.getElementById("box_saksi2")?.value || "").trim();
+      const rawText = (document.getElementById("rawTextarea")?.value || "").trim();
+
+      const hasPeristiwa = Boolean(boxPeristiwa);
+      const hasPelapor = Boolean(boxPelapor);
+      const hasOrtu = Boolean(boxOrtu || boxAyah || boxIbu);
+      const hasSaksi1 = Boolean(boxSaksi1);
+      const hasSaksi2 = Boolean(boxSaksi2);
+
+      let filledCount = 0;
+      if (currentInputMode === '1box') {
+        filledCount = rawText ? 5 : 0;
+      } else {
+        filledCount = [hasPeristiwa, hasPelapor, hasOrtu, hasSaksi1, hasSaksi2].filter(Boolean).length;
+      }
+
+      const ring1 = document.getElementById("inputProgressRing");
+      const ring2 = document.getElementById("inputBoxRing");
+      if (ring1) ring1.setAttribute("value", String(filledCount));
+      if (ring2) ring2.setAttribute("value", String(filledCount));
+
+      const sub = document.getElementById("inputProgressSubtitle");
+      if (sub) {
+        sub.innerText = currentInputMode === '1box'
+          ? (rawText ? `${rawText.length} karakter teks global siap diproses` : "Mode Global belum diisi")
+          : `${filledCount} dari 5 bagian teks terisi`;
+      }
+
+      const chipStates = [
+        { id: "statusChipPeristiwa", label: "Peristiwa", active: currentInputMode === '1box' ? Boolean(rawText) : hasPeristiwa },
+        { id: "statusChipPelapor", label: "Pelapor", active: currentInputMode === '1box' ? Boolean(rawText) : hasPelapor },
+        { id: "statusChipOrtu", label: "Orang Tua", active: currentInputMode === '1box' ? Boolean(rawText) : hasOrtu },
+        { id: "statusChipSaksi1", label: "Saksi I", active: currentInputMode === '1box' ? Boolean(rawText) : hasSaksi1 },
+        { id: "statusChipSaksi2", label: "Saksi II", active: currentInputMode === '1box' ? Boolean(rawText) : hasSaksi2 }
+      ];
+
+      chipStates.forEach((item) => {
+        const el = document.getElementById(item.id);
+        if (!el) return;
+        if (item.active) {
+          el.className = "px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#1E1E20] text-white border border-[#1E1E20] inline-flex items-center gap-1.5 transition-all";
+          el.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white"></span> ${item.label}`;
+        } else {
+          el.className = "px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/80 text-[#6B6B70] border border-black/[0.06] inline-flex items-center gap-1.5 transition-all";
+          el.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span> ${item.label}`;
+        }
+      });
+    }
+
+    // Scroll to & expand AI Config Card
+    function focusAiConfig() {
+      const content = document.getElementById("configContent");
+      const chevron = document.getElementById("accordionChevron");
+      const card = document.getElementById("aiConfigCard");
+      if (content && content.classList.contains("hidden")) {
+        content.classList.remove("hidden");
+        if (chevron) chevron.classList.remove("rotate-180");
+      }
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+
     // 3-WAY EVENT SELECTOR (KELAHIRAN / LAHIR MATI / KEMATIAN)
     function selectEventType(type) {
       currentEventType = type;
       const btnK = document.getElementById("btnEventKelahiran");
       const btnLM = document.getElementById("btnEventLahirMati");
       const btnM = document.getElementById("btnEventKematian");
+      const navK = document.getElementById("navEventKelahiran");
+      const navLM = document.getElementById("navEventLahirMati");
+      const navM = document.getElementById("navEventKematian");
       const badge = document.getElementById("activeEventBadge");
+      const pageTitle = document.getElementById("pageMainTitle");
+      const heroPageInfo = document.getElementById("heroPageInfo");
       const boxTitle = document.getElementById("peristiwaBoxTitle");
       const boxSubtitle = document.getElementById("peristiwaBoxSubtitle");
-      const textarea = document.getElementById("box_peristiwa");
       const selectEditor = document.getElementById("f_jenis_pelaporan");
 
-      const baseClass = "py-2 px-2 rounded-xl border border-slate-200 font-semibold text-xs flex flex-col items-center justify-center transition-all bg-white hover:bg-slate-50 text-slate-700 cursor-pointer shadow-2xs";
-      btnK.className = baseClass;
-      btnLM.className = baseClass;
-      btnM.className = baseClass;
+      const baseBtn = "py-2 px-2 rounded-xl font-medium text-[11px] flex items-center justify-center gap-1.5 transition-all text-[#6B6B70] hover:text-[#1E1E20] hover:bg-white/70 cursor-pointer";
+      const activeBtn = "py-2 px-2 rounded-xl font-semibold text-[11px] flex items-center justify-center gap-1.5 transition-all bg-[#1E1E20] text-white shadow-sm cursor-pointer";
+
+      const baseNav = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]";
+      const activeNav = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-full text-xs font-semibold transition-all bg-[#1E1E20] text-white";
+
+      if (btnK) btnK.className = baseBtn;
+      if (btnLM) btnLM.className = baseBtn;
+      if (btnM) btnM.className = baseBtn;
+      if (navK) navK.className = baseNav;
+      if (navLM) navLM.className = baseNav;
+      if (navM) navM.className = baseNav;
 
       if (type === 'Kelahiran') {
-        btnK.className = "py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-sky-50 border-sky-500 text-sky-900 shadow-xs cursor-pointer";
-        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300";
-        badge.innerText = "👶 Kelahiran (Hal 1)";
-        if (boxTitle) boxTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-sky-500"></span><span>1. Data Peristiwa: Kelahiran</span>`;
-        if (boxSubtitle) boxSubtitle.innerText = "RS/Bidan, Nama Bayi, Tanggal/Jam Lahir, BB, PB";
+        if (btnK) btnK.className = activeBtn;
+        if (navK) navK.className = activeNav;
+        if (badge) badge.innerText = "Kelahiran (Hal 1)";
+        if (pageTitle) pageTitle.innerText = "Pelaporan Kelahiran";
+        if (heroPageInfo) heroPageInfo.innerText = "Halaman 1";
+        if (boxTitle) boxTitle.innerHTML = `<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#1E1E20] text-white leading-none">01</span><span>Data Peristiwa: Kelahiran</span>`;
+        if (boxSubtitle) boxSubtitle.innerText = "RS/Bidan, Nama Bayi, Tgl/Jam, BB, PB";
         if (selectEditor) selectEditor.value = "Kelahiran";
       } else if (type === 'Lahir Mati') {
-        btnLM.className = "py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-amber-50 border-amber-500 text-amber-900 shadow-xs cursor-pointer";
-        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300";
-        badge.innerText = "🚼 Lahir Mati (Hal 2)";
-        if (boxTitle) boxTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>1. Data Peristiwa: Lahir Mati</span>`;
-        if (boxSubtitle) boxSubtitle.innerText = "Lamanya Kandungan (Bulan), Tanggal/Jam, RS, Sebab, Yang Menentukan";
+        if (btnLM) btnLM.className = activeBtn;
+        if (navLM) navLM.className = activeNav;
+        if (badge) badge.innerText = "Lahir Mati (Hal 2)";
+        if (pageTitle) pageTitle.innerText = "Pelaporan Lahir Mati";
+        if (heroPageInfo) heroPageInfo.innerText = "Halaman 2";
+        if (boxTitle) boxTitle.innerHTML = `<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#1E1E20] text-white leading-none">01</span><span>Data Peristiwa: Lahir Mati</span>`;
+        if (boxSubtitle) boxSubtitle.innerText = "Kandungan (Bln), Tgl/Jam, RS, Sebab";
         if (selectEditor) selectEditor.value = "Lahir Mati";
-      } else { // Kematian
-        btnM.className = "py-2 px-2 rounded-xl border-2 font-bold text-xs flex flex-col items-center justify-center transition-all bg-rose-50 border-rose-500 text-rose-900 shadow-xs cursor-pointer";
-        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-300";
-        badge.innerText = "🕊️ Kematian (Hal 3)";
-        if (boxTitle) boxTitle.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>1. Data Peristiwa: Kematian</span>`;
-        if (boxSubtitle) boxSubtitle.innerText = "Nama Almarhum, NIK, Tgl/Jam Kematian, Tempat Meninggal, Sebab";
+      } else {
+        if (btnM) btnM.className = activeBtn;
+        if (navM) navM.className = activeNav;
+        if (badge) badge.innerText = "Kematian (Hal 3)";
+        if (pageTitle) pageTitle.innerText = "Pelaporan Kematian";
+        if (heroPageInfo) heroPageInfo.innerText = "Halaman 3";
+        if (boxTitle) boxTitle.innerHTML = `<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#1E1E20] text-white leading-none">01</span><span>Data Peristiwa: Kematian</span>`;
+        if (boxSubtitle) boxSubtitle.innerText = "Nama Almarhum, NIK, Tgl/Jam, Tempat, Sebab";
         if (selectEditor) selectEditor.value = "Kematian";
       }
     }
 
-    // Load saved settings
+    // Load saved settings & attach live listeners
     document.addEventListener("DOMContentLoaded", () => {
       const savedEngine = localStorage.getItem("f201a_engine") || "ollama";
       document.getElementById("aiEngineSelect").value = savedEngine;
-      
+
       const savedApiKey = localStorage.getItem("f201a_api_key") || "";
       document.getElementById("apiKeyInput").value = savedApiKey;
 
       onEngineChange();
       checkOllamaStatus(false);
 
-      // Char counter for classic single textarea
-      const textarea = document.getElementById("rawTextarea");
-      if (textarea) {
-        textarea.addEventListener("input", () => {
-          const cc = document.getElementById("charCount");
-          if (cc) cc.innerText = `${textarea.value.length} karakter`;
-        });
-      }
+      // Live input progress tracking
+      ["box_peristiwa", "box_pelapor", "box_orangtua", "box_ayah", "box_ibu", "box_saksi1", "box_saksi2", "rawTextarea"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("input", () => {
+            if (id === "rawTextarea") {
+              const cc = document.getElementById("charCount");
+              if (cc) cc.innerText = `${el.value.length} karakter`;
+            }
+            updateInputProgress();
+          });
+        }
+      });
+
+      updateInputProgress();
     });
 
     // Toggle Input Mode: 5 Text Box vs 1 Global
@@ -783,20 +1306,35 @@
       currentInputMode = mode;
       const btn5Box = document.getElementById("btnTab5Box");
       const btn1Box = document.getElementById("btnTab1Box");
+      const nav5Box = document.getElementById("navMode5Box");
+      const nav1Box = document.getElementById("navMode1Box");
       const c5 = document.getElementById("container5Box");
       const c1 = document.getElementById("container1Box");
+      const modeLabel = document.getElementById("activeModeLabel");
+
+      const pillActive = "flex-1 py-1.5 px-2.5 rounded-full bg-[#1E1E20] text-white transition-all text-center text-[11px]";
+      const pillInactive = "flex-1 py-1.5 px-2.5 rounded-full text-[#6B6B70] hover:text-[#1E1E20] transition-all text-center text-[11px]";
+      const navActive = "w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all bg-[#F4F5F7] text-[#1E1E20]";
+      const navInactive = "w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]";
 
       if (mode === '5box') {
-        btn5Box.className = "px-2.5 py-1 rounded-md bg-white text-dukcapil-800 shadow-xs transition-all flex items-center space-x-1";
-        btn1Box.className = "px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all flex items-center space-x-1";
+        if (btn5Box) btn5Box.className = pillActive;
+        if (btn1Box) btn1Box.className = pillInactive;
+        if (nav5Box) nav5Box.className = navActive;
+        if (nav1Box) nav1Box.className = navInactive;
+        if (modeLabel) modeLabel.innerText = "5 Text Box Terpisah";
         c5.classList.remove("hidden");
         c1.classList.add("hidden");
       } else {
-        btn1Box.className = "px-2.5 py-1 rounded-md bg-white text-dukcapil-800 shadow-xs transition-all flex items-center space-x-1";
-        btn5Box.className = "px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all flex items-center space-x-1";
+        if (btn1Box) btn1Box.className = pillActive;
+        if (btn5Box) btn5Box.className = pillInactive;
+        if (nav1Box) nav1Box.className = navActive;
+        if (nav5Box) nav5Box.className = navInactive;
+        if (modeLabel) modeLabel.innerText = "1 Kotak Global";
         c1.classList.remove("hidden");
         c5.classList.add("hidden");
       }
+      updateInputProgress();
     }
 
     // Toggle Orang Tua Sub-mode: Combined vs Split
@@ -808,13 +1346,13 @@
       const vS = document.getElementById("ortuSplitView");
 
       if (mode === 'combined') {
-        btnC.className = "px-1.5 py-0.5 rounded bg-white text-indigo-900 shadow-xs";
-        btnS.className = "px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900";
+        btnC.className = "px-2.5 py-0.5 rounded-full bg-[#1E1E20] text-white transition-all";
+        btnS.className = "px-2.5 py-0.5 rounded-full text-[#6B6B70] hover:text-[#1E1E20] transition-all";
         vC.classList.remove("hidden");
         vS.classList.add("hidden");
       } else {
-        btnS.className = "px-1.5 py-0.5 rounded bg-white text-indigo-900 shadow-xs";
-        btnC.className = "px-1.5 py-0.5 rounded text-slate-600 hover:text-slate-900";
+        btnS.className = "px-2.5 py-0.5 rounded-full bg-[#1E1E20] text-white transition-all";
+        btnC.className = "px-2.5 py-0.5 rounded-full text-[#6B6B70] hover:text-[#1E1E20] transition-all";
         vS.classList.remove("hidden");
         vC.classList.add("hidden");
       }
@@ -841,7 +1379,6 @@
           throw new Error("Silakan isi teks pada salah satu atau lebih kotak input (Data Peristiwa, Pelapor, Orang Tua, Saksi I, Saksi II).");
         }
 
-        // Build combined text as well
         const parts = [];
         if (text_peristiwa) parts.push(`[DATA PERISTIWA]\n${text_peristiwa}`);
         if (text_pelapor) parts.push(`[DATA PELAPOR]\n${text_pelapor}`);
@@ -886,7 +1423,7 @@
       const content = document.getElementById("configContent");
       const chevron = document.getElementById("accordionChevron");
       content.classList.toggle("hidden");
-      chevron.classList.toggle("rotate-180");
+      if (chevron) chevron.classList.toggle("rotate-180");
     }
 
     function toggleAiGuideModal() {
@@ -921,9 +1458,11 @@
       const host = document.getElementById("ollamaHostInput").value.trim() || "http://localhost:11434";
       const badge = document.getElementById("ollamaStatusBadge");
       const helper = document.getElementById("ollamaOfflineHelper");
+      const heroEngine = document.getElementById("heroEngineInfo");
+      const sidebarDot = document.getElementById("sidebarEngineDot");
 
       if (badge) {
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span>Mengecek...</span>`;
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#6B6B70] animate-ping"></span><span>Mengecek...</span>`;
       }
 
       try {
@@ -931,9 +1470,13 @@
         const data = await resp.json();
 
         if (data.online) {
-          badge.className = "flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-medium";
-          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Online (${data.count} model lokal)</span>`;
+          badge.className = "inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full bg-[#1E1E20] text-white font-semibold";
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-white"></span><span>Online (${data.count} model)</span>`;
           helper.classList.add("hidden");
+          if (sidebarDot) sidebarDot.className = "w-1.5 h-1.5 rounded-full bg-[#1E1E20]";
+          if (heroEngine && document.getElementById("aiEngineSelect")?.value === "ollama") {
+            heroEngine.innerText = "Ollama (Online)";
+          }
 
           if (data.models && data.models.length > 0) {
             const select = document.getElementById("ollamaModelSelect");
@@ -949,18 +1492,23 @@
             select.value = data.models[0];
           }
 
-          if (isManual) showAlert(`Ollama aktif di ${host}! Terdeteksi ${data.count} model lokal.`, "success");
+          if (isManual) showAlert(`Ollama aktif di ${host}. Terdeteksi ${data.count} model lokal.`, "success");
         } else {
-          badge.className = "flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-medium";
-          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Offline</span>`;
+          badge.className = "inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full bg-[#E5E6E9] text-[#6B6B70] border border-black/[0.08] font-medium";
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span><span>Offline</span>`;
           helper.classList.remove("hidden");
+          if (sidebarDot) sidebarDot.className = "w-1.5 h-1.5 rounded-full bg-[#9A9AA0]";
+          if (heroEngine && document.getElementById("aiEngineSelect")?.value === "ollama") {
+            heroEngine.innerText = "Regex Fallback";
+          }
           if (isManual) showAlert(`Ollama belum aktif di ${host}. Sistem otomatis menggunakan Smart Regex Parser bawaan.`, "info");
         }
       } catch (err) {
         if (badge) {
-          badge.className = "flex items-center space-x-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-medium";
-          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Offline</span>`;
+          badge.className = "inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full bg-[#E5E6E9] text-[#6B6B70] border border-black/[0.08] font-medium";
+          badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#9A9AA0]"></span><span>Offline</span>`;
         }
+        if (sidebarDot) sidebarDot.className = "w-1.5 h-1.5 rounded-full bg-[#9A9AA0]";
         if (helper) helper.classList.remove("hidden");
       }
     }
@@ -974,31 +1522,32 @@
       const ollamaGroup = document.getElementById("ollamaGroup");
       const engineHint = document.getElementById("engineHint");
       const badge = document.getElementById("currentEngineBadge");
+      const heroEngine = document.getElementById("heroEngineInfo");
 
       if (engine === "ollama") {
         badge.innerText = "Local Ollama (100% Offline & Privat)";
-        badge.className = "text-emerald-700 font-bold";
+        if (heroEngine) heroEngine.innerText = "Ollama";
         apiKeyGroup.classList.add("hidden");
         ollamaGroup.classList.remove("hidden");
-        engineHint.innerText = "Berjalan 100% lokal di komputer Anda. Data kependudukan tidak pernah keluar ke internet (Kepatuhan UU PDP).";
+        engineHint.innerText = "Berjalan 100% lokal di komputer Anda. Data kependudukan tidak pernah keluar ke internet (UU PDP).";
         checkOllamaStatus(false);
       } else if (engine === "gemini") {
-        badge.innerText = "Google Gemini AI (Cloud)";
-        badge.className = "text-sky-600 font-bold";
+        badge.innerText = "Google Gemini 2.5 Flash (Cloud)";
+        if (heroEngine) heroEngine.innerText = "Gemini Flash";
         apiKeyGroup.classList.remove("hidden");
         ollamaGroup.classList.add("hidden");
         apiKeyLabel.innerText = "API Key Gemini:";
-        engineHint.innerText = "Menggunakan Gemini 2.5 Flash via official SDK. Sangat cepat & akurat untuk Bahasa Indonesia.";
+        engineHint.innerText = "Menggunakan Gemini 2.5 Flash via official SDK dengan JSON output terstruktur.";
       } else if (engine === "openai") {
-        badge.innerText = "OpenAI GPT (Cloud)";
-        badge.className = "text-violet-600 font-bold";
+        badge.innerText = "OpenAI GPT-4o-mini (Cloud)";
+        if (heroEngine) heroEngine.innerText = "GPT-4o-mini";
         apiKeyGroup.classList.remove("hidden");
         ollamaGroup.classList.add("hidden");
         apiKeyLabel.innerText = "API Key OpenAI:";
         engineHint.innerText = "Menggunakan model gpt-4o-mini dengan format JSON terstruktur.";
       } else {
-        badge.innerText = "Smart Regex (Offline)";
-        badge.className = "text-slate-600 font-bold";
+        badge.innerText = "Smart Regex Bawaan (Offline)";
+        if (heroEngine) heroEngine.innerText = "Smart Regex";
         apiKeyGroup.classList.add("hidden");
         ollamaGroup.classList.add("hidden");
         engineHint.innerText = "Bekerja langsung tanpa API Key atau LLM. Mengenali pola NIK, KK, tanggal, jam, berat, dan faskes secara instan.";
@@ -1024,8 +1573,7 @@
       try {
         const resp = await fetch(`/api/sample-data/${sampleId}`);
         const data = await resp.json();
-        
-        // Fill 5 Boxes
+
         if (data.sections) {
           if (document.getElementById("box_peristiwa")) document.getElementById("box_peristiwa").value = data.sections.peristiwa || "";
           if (document.getElementById("box_pelapor")) document.getElementById("box_pelapor").value = data.sections.pelapor || "";
@@ -1035,16 +1583,16 @@
           if (document.getElementById("box_saksi1")) document.getElementById("box_saksi1").value = data.sections.saksi1 || "";
           if (document.getElementById("box_saksi2")) document.getElementById("box_saksi2").value = data.sections.saksi2 || "";
         }
-        
-        // Also fill classic rawTextarea
+
         const textarea = document.getElementById("rawTextarea");
         if (textarea) {
           textarea.value = data.text;
           const cc = document.getElementById("charCount");
           if (cc) cc.innerText = `${data.text.length} karakter`;
         }
-        
-        showAlert("Contoh data berhasil dimuat ke dalam kotak input. Klik 'Generate PDF' untuk langsung memproses.", "info");
+
+        updateInputProgress();
+        showAlert("Contoh data berhasil dimuat. Klik 'Generate PDF' untuk memproses formulir.", "info");
       } catch (err) {
         showAlert("Gagal memuat sample: " + err.message, "error");
       } finally {
@@ -1059,6 +1607,7 @@
       });
       const cc = document.getElementById("charCount");
       if (cc) cc.innerText = "0 karakter";
+      updateInputProgress();
       showAlert("Semua kotak input telah dibersihkan.", "info");
     }
 
@@ -1066,17 +1615,28 @@
     function switchTab(tab) {
       const tabBtnPdf = document.getElementById("tabBtnPdf");
       const tabBtnData = document.getElementById("tabBtnData");
+      const navTabPdf = document.getElementById("navTabPdf");
+      const navTabData = document.getElementById("navTabData");
       const contentPdf = document.getElementById("tabContentPdf");
       const contentData = document.getElementById("tabContentData");
 
+      const activeTab = "px-4 py-1.5 text-xs font-semibold rounded-full bg-[#1E1E20] text-white transition-all flex items-center gap-1.5";
+      const inactiveTab = "px-4 py-1.5 text-xs font-medium rounded-full text-[#6B6B70] hover:text-[#1E1E20] transition-all flex items-center gap-1.5";
+      const navActive = "w-full flex items-center justify-between px-3.5 py-2 rounded-full text-xs font-semibold transition-all bg-[#F4F5F7] text-[#1E1E20]";
+      const navInactive = "w-full flex items-center justify-between px-3.5 py-2 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]";
+
       if (tab === "pdf") {
-        tabBtnPdf.className = "px-4 py-2 text-xs font-bold rounded-t-lg border-b-2 border-dukcapil-600 text-dukcapil-900 bg-white flex items-center space-x-1.5";
-        tabBtnData.className = "px-4 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-1.5";
+        if (tabBtnPdf) tabBtnPdf.className = activeTab;
+        if (tabBtnData) tabBtnData.className = inactiveTab;
+        if (navTabPdf) navTabPdf.className = "w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-semibold transition-all bg-[#F4F5F7] text-[#1E1E20]";
+        if (navTabData) navTabData.className = navInactive;
         contentPdf.classList.remove("hidden");
         contentData.classList.add("hidden");
       } else {
-        tabBtnData.className = "px-4 py-2 text-xs font-bold rounded-t-lg border-b-2 border-dukcapil-600 text-dukcapil-900 bg-white flex items-center space-x-1.5";
-        tabBtnPdf.className = "px-4 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center space-x-1.5";
+        if (tabBtnData) tabBtnData.className = activeTab;
+        if (tabBtnPdf) tabBtnPdf.className = inactiveTab;
+        if (navTabData) navTabData.className = navActive;
+        if (navTabPdf) navTabPdf.className = "w-full flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium transition-all text-[#6B6B70] hover:bg-[#F4F5F7] hover:text-[#1E1E20]";
         contentData.classList.remove("hidden");
         contentPdf.classList.add("hidden");
       }
@@ -1095,18 +1655,18 @@
 
     function showAlert(msg, type = "info") {
       const alert = document.getElementById("statusAlert");
-      alert.classList.remove("hidden", "bg-emerald-50", "text-emerald-800", "border-emerald-200", "bg-red-50", "text-red-800", "border-red-200", "bg-sky-50", "text-sky-800", "border-sky-200");
-      
-      let borderClass = "border";
+      alert.className = "px-4 py-2.5 rounded-2xl text-xs font-medium flex items-center justify-between gap-2 transition-all";
+
       if (type === "success") {
-        alert.classList.add("bg-emerald-50", "text-emerald-800", "border-emerald-200", borderClass);
+        alert.classList.add("bg-[#1E1E20]", "text-white", "border", "border-[#1E1E20]");
       } else if (type === "error") {
-        alert.classList.add("bg-red-50", "text-red-800", "border-red-200", borderClass);
+        alert.classList.add("alert-muted-error");
       } else {
-        alert.classList.add("bg-sky-50", "text-sky-800", "border-sky-200", borderClass);
+        alert.classList.add("bg-white", "text-[#1E1E20]", "border", "border-black/[0.1]");
       }
-      alert.innerHTML = `<span>${msg}</span>`;
-      setTimeout(() => alert.classList.add("hidden"), 7000);
+      alert.innerHTML = `<span>${msg}</span><button type="button" onclick="this.parentElement.classList.add('hidden')" class="opacity-65 hover:opacity-100 text-[11px] font-bold ml-3">Tutup</button>`;
+      clearTimeout(window._alertTimer);
+      window._alertTimer = setTimeout(() => alert.classList.add("hidden"), 7000);
     }
 
     // 1-CLICK: GENERATE PDF DIRECTLY
@@ -1122,7 +1682,6 @@
       showLoading(true, "AI mendeteksi data & menghasilkan Formulir F-2.01 A...");
 
       try {
-        // Step 1: Extract data first so we also have the data model populated in editor
         const extResp = await fetch("/api/extract", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
@@ -1134,7 +1693,6 @@
         currentExtractedData = extResult.data;
         populateEditorFields(currentExtractedData);
 
-        // Step 2: Generate PDF directly from extracted data
         const pdfResp = await fetch("/api/generate-pdf", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
@@ -1150,7 +1708,7 @@
         displayPdfBlob(blob, fnHeader);
 
         switchTab("pdf");
-        showAlert("Berhasil! Formulir F-2.01 A telah digenerate dari data mentah.", "success");
+        showAlert("Formulir F-2.01 A berhasil digenerate dan siap diunduh.", "success");
 
       } catch (err) {
         showAlert("Terjadi kesalahan: " + err.message, "error");
@@ -1183,7 +1741,7 @@
         currentExtractedData = result.data;
         populateEditorFields(currentExtractedData);
         switchTab("data");
-        showAlert("Elemen data berhasil dideteksi! Anda dapat meninjau atau mengeditnya di tab data.", "success");
+        showAlert("Elemen data berhasil dideteksi. Anda dapat meninjau atau mengeditnya di tab editor.", "success");
       } catch (err) {
         showAlert("Gagal: " + err.message, "error");
       } finally {
@@ -1212,7 +1770,7 @@
         const fnHeader = pdfResp.headers.get("X-Suggested-Filename");
         displayPdfBlob(blob, fnHeader);
         switchTab("pdf");
-        showAlert("PDF berhasil diperbarui sesuai perubahan elemen data Anda!", "success");
+        showAlert("PDF berhasil diperbarui sesuai perubahan elemen data.", "success");
       } catch (err) {
         showAlert("Error: " + err.message, "error");
       } finally {
@@ -1313,7 +1871,7 @@
         URL.revokeObjectURL(currentPdfBlobUrl);
       }
       currentPdfBlobUrl = URL.createObjectURL(blob);
-      
+
       const iframe = document.getElementById("pdfIframe");
       const emptyState = document.getElementById("emptyPdfState");
       const actionButtons = document.getElementById("pdfActionButtons");
@@ -1385,12 +1943,32 @@
       const countFields = (obj) => {
         if (!obj) return;
         for (let k in obj) {
+          if (k.startsWith("_")) continue;
           if (typeof obj[k] === "object") countFields(obj[k]);
           else if (obj[k]) count++;
         }
       };
       countFields(d);
       document.getElementById("detectedCount").innerText = count;
+
+      const navBadge = document.getElementById("navDetectedBadge");
+      if (navBadge) navBadge.innerText = count;
+
+      const heroCount = document.getElementById("heroDetectedNumber");
+      if (heroCount) heroCount.innerText = count;
+
+      const editorIds = [
+        "f_wilayah_provinsi", "f_wilayah_kab_kota", "f_wilayah_kecamatan", "f_wilayah_kelurahan",
+        "f_bayi_nama", "f_bayi_faskes", "f_bayi_hari", "f_bayi_tgl", "f_bayi_bln", "f_bayi_thn",
+        "f_bayi_jam", "f_bayi_menit", "f_bayi_berat", "f_bayi_panjang",
+        "f_ayah_nama", "f_ayah_nik", "f_ibu_nama", "f_ibu_nik", "f_nomor_kk", "f_pelapor_nama", "f_pelapor_nik"
+      ];
+      const filledEditor = editorIds.filter(id => (document.getElementById(id)?.value || "").trim()).length;
+      const editorRing = document.getElementById("editorProgressRing");
+      if (editorRing) {
+        editorRing.setAttribute("max", String(editorIds.length));
+        editorRing.setAttribute("value", String(filledEditor));
+      }
     }
 
     // Collect editor inputs back into data model
